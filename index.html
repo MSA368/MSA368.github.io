@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sivuston Otsikko</title>
+    <style>
+        /* Tummansininen ja musta teema */
+        :root {
+            --bg-color: #0b0f19;       /* Erittäin tumma mustansininen tausta */
+            --card-bg: #161f33;        /* Tummasininen laatikon tausta */
+            --primary-blue: #1e40af;   /* Selkeä sininen korostusväri */
+            --light-blue: #3b82f6;     /* Kirkas sininen linkeille ja teksteille */
+            --text-main: #f8fafc;      /* Lähes valkoinen pääteksti */
+            --text-muted: #94a3b8;     /* Harmaansininen leipäteksti */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #030712; /* Täysin musta yläpalkki */
+            border-bottom: 3px solid var(--primary-blue);
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            color: var(--light-blue);
+        }
+
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .artikkeli {
+            background-color: var(--card-bg);
+            border-left: 5px solid var(--primary-blue);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .artikkeli h2 {
+            color: var(--light-blue);
+            margin-top: 0;
+            font-size: 1.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .artikkeli h3 {
+            color: var(--text-main);
+            font-size: 1.2rem;
+            margin-top: 25px;
+            margin-bottom: 5px;
+        }
+
+        .artikkeli p {
+            color: var(--text-muted);
+            margin-top: 0;
+            text-align: justify;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Yhteiskunnallinen Blogi</h1>
+    </header>
+
+    <main>
+        <!-- TÄSTÄ ALKAA ARTIKKELI. VOIT KOPIOIDA TÄMÄN OSIOT UUSIA TEKSTEJÄ VARTEN -->
+        <article class="artikkeli">
+            <h2>Miksi maahanmuutto on pahaksi Suomelle</h2>
+
+            <h3>Kulttuuri ja arvot</h3>
+            <p>Suomalainen yhteiskunta perustuu vahvasti luottamukseen, tasa-arvoon ja lakiin. Hallitsematon maahanmuutto voi tuoda mukanaan arvoja, jotka ovat ristiriidassa näiden periaatteiden kanssa. Kansallisen kulttuurin ja kielen säilyminen nähdään tärkeänä itsenäisyyden pilarina.</p>
+
+            <h3>Turvallisuus ja järjestys</h3>
+            <p>Monissa Euroopan maissa liian nopea maahanmuutto on johtanut segregaatioon eli asuinalueiden eriytymiseen ja jengiytymiseen. Tiukalla maahanmuuttopolitiikalla halutaan ennaltaehkäistä näitä ilmiöitä ja pitää Suomi yhtenä maailman turvallisimmista maista.</p>
+
+            <h3>Hyvinvointivaltion kantokyky</h3>
+            <p>Suomen sosiaaliturvajärjestelmä ja julkiset palvelut, kuten terveydenhuolto ja koulutus, perustuvat veronmaksajien rahoitukseen. Jos maahanmuutto kohdistuu pääosin alhaisen koulutustason ryhmiin, se luo pitkäaikaisen rasitteen julkiselle taloudelle ja heikentää hyvinvointipalvelujen tasoa kaikille.</p>
+
+            <h3>Kotouttamisen haasteet</h3>
+            <p>Resurssit kielenopetukseen, koulutukseen ja työllistämiseen ovat rajalliset. Liian suuret muuttomäärät vaikeuttavat tulijoiden todellista sopeutumista yhteiskuntaan, mikä voi johtaa syrjäytymiseen ja sosiaalisiin ongelmiin.</p>
+        </article>
+        <!-- TÄHÄN LOPPUU ARTIKKELI -->
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Verkkosivusto</p>
+    </footer>
+
+</body>
+</html>
