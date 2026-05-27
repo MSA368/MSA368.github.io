@@ -2,68 +2,68 @@
 <html lang="fi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Neon Horizon</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pohjoinen Valo — Suomen Luonto</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --blue-bright: #00c8ff;
-      --blue-mid: #0077cc;
-      --blue-dark: #003366;
-      --black: #000000;
-      --black-soft: #080c14;
-      --black-card: #0a111d;
-      --glow: 0 0 10px #00c8ff, 0 0 30px #00c8ffaa, 0 0 60px #00c8ff44;
-      --glow-sm: 0 0 6px #00c8ff, 0 0 18px #00c8ff88;
+      --black: #060810;
+      --deep: #080d1a;
+      --navy: #0a1428;
+      --blue-dark: #0d1f3c;
+      --blue-mid: #1a3a6b;
+      --blue: #1e5aad;
+      --blue-bright: #2d7dd2;
+      --ice: #7ec8f0;
+      --white: #e8f0fb;
+      --dim: #4a6a9a;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     html { scroll-behavior: smooth; }
 
     body {
       background: var(--black);
-      color: #cce8ff;
-      font-family: 'Exo 2', sans-serif;
+      color: var(--white);
+      font-family: 'Space Mono', monospace;
       overflow-x: hidden;
+      cursor: default;
     }
 
-    /* ---- GRID BACKGROUND ---- */
-    body::before {
-      content: '';
+    /* STARFIELD */
+    canvas#stars {
       position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(0,200,255,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,200,255,0.05) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: 0;
+      pointer-events: none;
     }
 
-    /* ---- NAV ---- */
+    /* NAV */
     nav {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 0; width: 100%;
       z-index: 100;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 3rem;
-      background: linear-gradient(180deg, rgba(0,0,0,0.95), transparent);
-      border-bottom: 1px solid rgba(0,200,255,0.15);
+      padding: 1.2rem 3rem;
+      background: linear-gradient(to bottom, rgba(6,8,16,0.95), transparent);
+      backdrop-filter: blur(2px);
     }
 
     .logo {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 900;
-      color: var(--blue-bright);
-      text-shadow: var(--glow-sm);
-      letter-spacing: 0.1em;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--ice);
     }
 
-    .logo span { color: #fff; }
+    .logo span {
+      color: var(--blue-bright);
+    }
 
     nav ul {
       list-style: none;
@@ -71,149 +71,94 @@
       gap: 2.5rem;
     }
 
-    nav ul a {
-      color: #88bbdd;
+    nav ul li a {
       text-decoration: none;
-      font-size: 0.85rem;
-      letter-spacing: 0.15em;
+      color: var(--dim);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      transition: color 0.3s, text-shadow 0.3s;
+      transition: color 0.3s;
     }
 
-    nav ul a:hover {
-      color: var(--blue-bright);
-      text-shadow: var(--glow-sm);
-    }
+    nav ul li a:hover { color: var(--ice); }
 
-    /* ---- HERO ---- */
+    /* HERO */
     .hero {
       position: relative;
+      z-index: 1;
       min-height: 100vh;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
-      text-align: center;
-      padding: 6rem 2rem 4rem;
-      z-index: 1;
+      align-items: flex-start;
+      padding: 0 4rem;
       overflow: hidden;
     }
 
-    .hero-orb {
+    .hero-aurora {
       position: absolute;
-      width: 700px; height: 700px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #003d6b55 0%, #00c8ff11 40%, transparent 70%);
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      animation: pulse 6s ease-in-out infinite;
-      pointer-events: none;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 40% at 60% 30%, rgba(30,90,173,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 50% at 20% 60%, rgba(13,30,60,0.5) 0%, transparent 60%);
+      animation: aurora 8s ease-in-out infinite alternate;
     }
 
-    @keyframes pulse {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-      50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    @keyframes aurora {
+      0% { opacity: 0.7; transform: translateY(0) scaleX(1); }
+      100% { opacity: 1; transform: translateY(-20px) scaleX(1.05); }
     }
 
-    .hero-corner {
-      position: absolute;
-      width: 120px; height: 120px;
-      border-color: var(--blue-bright);
-      border-style: solid;
-      opacity: 0.5;
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 750px;
     }
-    .hero-corner.tl { top: 8rem; left: 3rem; border-width: 2px 0 0 2px; }
-    .hero-corner.tr { top: 8rem; right: 3rem; border-width: 2px 2px 0 0; }
-    .hero-corner.bl { bottom: 4rem; left: 3rem; border-width: 0 0 2px 2px; }
-    .hero-corner.br { bottom: 4rem; right: 3rem; border-width: 0 2px 2px 0; }
 
-    .hero-tag {
-      font-size: 0.75rem;
-      letter-spacing: 0.4em;
+    .hero-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
       text-transform: uppercase;
       color: var(--blue-bright);
-      text-shadow: var(--glow-sm);
       margin-bottom: 1.5rem;
-      animation: fadeUp 1s 0.2s both;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.3s forwards;
     }
 
-    h1 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(2.8rem, 7vw, 6rem);
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      line-height: 0.95;
       font-weight: 900;
-      line-height: 1.05;
-      color: #fff;
-      text-shadow: 0 0 40px rgba(0,200,255,0.4);
-      margin-bottom: 1.5rem;
-      animation: fadeUp 1s 0.4s both;
+      color: var(--white);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.5s forwards;
     }
 
-    h1 .accent {
-      color: var(--blue-bright);
-      text-shadow: var(--glow);
+    .hero h1 em {
+      font-style: italic;
+      color: var(--ice);
     }
 
     .hero-sub {
-      font-size: 1.1rem;
-      font-weight: 300;
-      color: #88aacc;
-      max-width: 540px;
-      margin: 0 auto 3rem;
-      line-height: 1.7;
-      animation: fadeUp 1s 0.6s both;
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      line-height: 1.9;
+      color: var(--dim);
+      max-width: 480px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.8s forwards;
     }
 
-    .btn-group {
-      display: flex;
-      gap: 1.2rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      animation: fadeUp 1s 0.8s both;
-    }
-
-    .btn {
-      padding: 0.85rem 2.2rem;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border-radius: 2px;
-      cursor: pointer;
-      transition: all 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn-primary {
-      background: var(--blue-bright);
-      color: #000;
-      border: none;
-      font-weight: 700;
-    }
-
-    .btn-primary::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-      transform: translateX(-100%);
-      transition: transform 0.5s;
-    }
-
-    .btn-primary:hover::before { transform: translateX(100%); }
-    .btn-primary:hover { box-shadow: var(--glow); transform: translateY(-2px); }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--blue-bright);
-      border: 1px solid var(--blue-bright);
-      font-weight: 400;
-    }
-
-    .btn-outline:hover {
-      background: rgba(0,200,255,0.1);
-      box-shadow: var(--glow-sm);
-      transform: translateY(-2px);
+    .hero-line {
+      margin-top: 2.5rem;
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(to right, var(--blue-bright), transparent);
+      opacity: 0;
+      animation: fadeUp 0.9s 1s forwards;
     }
 
     @keyframes fadeUp {
@@ -221,433 +166,526 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ---- STATS BAR ---- */
-    .stats-bar {
-      position: relative;
-      z-index: 1;
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
       display: flex;
-      justify-content: center;
-      gap: 0;
-      border-top: 1px solid rgba(0,200,255,0.15);
-      border-bottom: 1px solid rgba(0,200,255,0.15);
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(10px);
-    }
-
-    .stat {
-      flex: 1;
-      max-width: 220px;
-      padding: 2rem 1.5rem;
-      text-align: center;
-      border-right: 1px solid rgba(0,200,255,0.1);
-    }
-    .stat:last-child { border-right: none; }
-
-    .stat-number {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 2.4rem;
-      font-weight: 900;
-      color: var(--blue-bright);
-      text-shadow: var(--glow-sm);
-      display: block;
-    }
-
-    .stat-label {
-      font-size: 0.75rem;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--dim);
+      font-size: 0.6rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: #556677;
-      margin-top: 0.3rem;
+      animation: bounce 2s ease-in-out infinite;
     }
 
-    /* ---- SECTIONS ---- */
+    .scroll-hint::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--blue-bright), transparent);
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* SECTION BASE */
     section {
       position: relative;
       z-index: 1;
-      padding: 6rem 2rem;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
+      padding: 6rem 4rem;
     }
 
     .section-label {
-      font-size: 0.7rem;
-      letter-spacing: 0.4em;
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
       text-transform: uppercase;
       color: var(--blue-bright);
-      text-shadow: var(--glow-sm);
-      margin-bottom: 0.8rem;
-    }
-
-    h2 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      font-weight: 700;
-      color: #fff;
       margin-bottom: 1rem;
-      line-height: 1.2;
     }
 
-    .section-desc {
-      color: #556888;
-      font-size: 1rem;
-      line-height: 1.7;
-      max-width: 500px;
-      margin-bottom: 3.5rem;
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 3rem;
     }
 
-    /* ---- CARDS ---- */
-    .cards {
+    /* FEATURES GRID */
+    .features {
+      background: linear-gradient(to bottom, var(--black), var(--deep));
+    }
+
+    .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5px;
-      background: rgba(0,200,255,0.08);
-      border: 1px solid rgba(0,200,255,0.08);
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--blue-mid);
+      border: 1px solid var(--blue-mid);
     }
 
-    .card {
-      background: var(--black-card);
+    .feature-card {
+      background: var(--deep);
       padding: 2.5rem;
       transition: background 0.3s;
       position: relative;
       overflow: hidden;
     }
 
-    .card::before {
+    .feature-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--blue-bright), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
+      background: linear-gradient(to right, var(--blue-bright), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
     }
 
-    .card:hover { background: #0c1828; }
-    .card:hover::before { opacity: 1; }
+    .feature-card:hover { background: var(--navy); }
+    .feature-card:hover::before { transform: scaleX(1); }
 
-    .card-icon {
+    .feature-icon {
       font-size: 2rem;
       margin-bottom: 1.2rem;
-      display: block;
     }
 
-    .card h3 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1rem;
-      color: #aaddff;
+    .feature-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
       margin-bottom: 0.8rem;
-      letter-spacing: 0.05em;
+      color: var(--white);
     }
 
-    .card p {
-      font-size: 0.9rem;
-      color: #445566;
-      line-height: 1.65;
+    .feature-desc {
+      font-size: 0.75rem;
+      line-height: 1.9;
+      color: var(--dim);
     }
 
-    /* ---- FEATURE SPLIT ---- */
-    .feature-split {
+    /* STATS */
+    .stats {
+      background: var(--blue-dark);
+      border-top: 1px solid rgba(45,125,210,0.2);
+      border-bottom: 1px solid rgba(45,125,210,0.2);
+    }
+
+    .stats-inner {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: center;
-    }
-
-    @media (max-width: 768px) {
-      .feature-split { grid-template-columns: 1fr; gap: 2.5rem; }
-      nav ul { display: none; }
-      .hero-corner { display: none; }
-    }
-
-    .feature-visual {
-      position: relative;
-      aspect-ratio: 1;
-      max-width: 420px;
-    }
-
-    .hex-ring {
-      width: 100%;
-      height: 100%;
-      border: 1px solid rgba(0,200,255,0.2);
-      border-radius: 50%;
-      position: absolute;
-      animation: spin 20s linear infinite;
-    }
-
-    .hex-ring:nth-child(2) {
-      width: 75%; height: 75%;
-      top: 12.5%; left: 12.5%;
-      border-color: rgba(0,200,255,0.35);
-      animation-duration: 14s;
-      animation-direction: reverse;
-    }
-
-    .hex-ring:nth-child(3) {
-      width: 50%; height: 50%;
-      top: 25%; left: 25%;
-      border-color: rgba(0,200,255,0.55);
-      animation-duration: 8s;
-    }
-
-    .hex-core {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 80px; height: 80px;
-      background: radial-gradient(circle, var(--blue-bright), var(--blue-dark));
-      border-radius: 50%;
-      box-shadow: var(--glow), 0 0 80px #00c8ff55;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-    }
-
-    .orbit-dot {
-      position: absolute;
-      width: 8px; height: 8px;
-      background: var(--blue-bright);
-      border-radius: 50%;
-      box-shadow: var(--glow-sm);
-      top: -4px;
-      left: calc(50% - 4px);
-      transform-origin: 4px calc(50% + 4px);
-    }
-
-    .hex-ring:nth-child(1) .orbit-dot { animation: spin 20s linear infinite; }
-    .hex-ring:nth-child(2) .orbit-dot { animation: spin 14s linear infinite reverse; }
-
-    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-    .feature-list {
-      list-style: none;
-      margin-top: 2rem;
-    }
-
-    .feature-list li {
-      display: flex;
-      gap: 1rem;
-      padding: 1rem 0;
-      border-bottom: 1px solid rgba(0,200,255,0.07);
-      font-size: 0.95rem;
-      color: #667788;
-      align-items: flex-start;
-    }
-
-    .feature-list li::before {
-      content: '▸';
-      color: var(--blue-bright);
-      text-shadow: var(--glow-sm);
-      flex-shrink: 0;
-      margin-top: 0.1rem;
-    }
-
-    /* ---- CTA ---- */
-    .cta-section {
-      background: linear-gradient(135deg, #000d1a, #001933);
-      border-top: 1px solid rgba(0,200,255,0.12);
-      border-bottom: 1px solid rgba(0,200,255,0.12);
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
       text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      color: var(--ice);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-top: 0.5rem;
+    }
+
+    /* ARTICLES */
+    .articles {
+      background: var(--deep);
+    }
+
+    .article-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .article-card {
+      background: var(--navy);
+      border: 1px solid rgba(45,125,210,0.15);
+      padding: 2rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .article-card:hover {
+      border-color: var(--blue-bright);
+      transform: translateY(-4px);
+    }
+
+    .article-card.featured {
+      grid-row: span 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background:
+        linear-gradient(to top, rgba(6,8,16,0.95) 40%, rgba(8,13,26,0.5) 100%),
+        linear-gradient(135deg, var(--blue-dark) 0%, var(--navy) 100%);
+      min-height: 420px;
       position: relative;
       overflow: hidden;
     }
 
-    .cta-section::before {
-      content: '';
+    .article-card.featured::after {
+      content: '❄';
       position: absolute;
-      bottom: -100px; left: 50%;
-      transform: translateX(-50%);
-      width: 600px; height: 200px;
-      background: radial-gradient(ellipse, rgba(0,200,255,0.12), transparent 70%);
-      pointer-events: none;
+      top: 2rem; right: 2rem;
+      font-size: 6rem;
+      opacity: 0.07;
     }
 
-    .cta-section h2 { margin-bottom: 1.5rem; }
+    .article-tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--blue-bright);
+      margin-bottom: 0.8rem;
+    }
 
-    /* ---- FOOTER ---- */
+    .article-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 0.8rem;
+      color: var(--white);
+    }
+
+    .article-card.featured .article-title {
+      font-size: 1.8rem;
+    }
+
+    .article-meta {
+      font-size: 0.65rem;
+      color: var(--dim);
+      margin-top: 1rem;
+    }
+
+    .article-excerpt {
+      font-size: 0.75rem;
+      line-height: 1.8;
+      color: var(--dim);
+    }
+
+    /* QUOTE */
+    .quote-section {
+      background: var(--black);
+      text-align: center;
+      padding: 8rem 4rem;
+    }
+
+    .big-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 4vw, 2.8rem);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--white);
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.5;
+      opacity: 0.85;
+    }
+
+    .big-quote::before, .big-quote::after {
+      content: '"';
+      color: var(--blue-bright);
+      font-size: 1.2em;
+    }
+
+    .quote-author {
+      margin-top: 1.5rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    /* FOOTER */
     footer {
       position: relative;
       z-index: 1;
-      padding: 2.5rem 3rem;
+      background: var(--black);
+      border-top: 1px solid rgba(45,125,210,0.2);
+      padding: 3rem 4rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-top: 1px solid rgba(0,200,255,0.1);
-      font-size: 0.8rem;
-      color: #334455;
     }
 
-    footer .logo { font-size: 1rem; }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--ice);
+    }
 
-    /* ---- SCANLINE OVERLAY ---- */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0,0,0,0.03) 2px,
-        rgba(0,0,0,0.03) 4px
-      );
-      pointer-events: none;
-      z-index: 999;
+    .footer-copy {
+      font-size: 0.65rem;
+      color: var(--dim);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+      color: var(--dim);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover { color: var(--ice); }
+
+    /* DIVIDER */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--blue-mid), transparent);
+      margin: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      nav ul { gap: 1.2rem; }
+      .hero, section { padding: 4rem 1.5rem; }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); }
+      .article-grid { grid-template-columns: 1fr; }
+      .article-card.featured { grid-row: span 1; }
+      footer { flex-direction: column; gap: 1.5rem; text-align: center; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <div class="logo">NEON<span>HORIZON</span></div>
-    <ul>
-      <li><a href="#palvelut">Palvelut</a></li>
-      <li><a href="#teknologia">Teknologia</a></li>
-      <li><a href="#meista">Meistä</a></li>
-      <li><a href="#yhteystiedot">Yhteystiedot</a></li>
-    </ul>
-    <a href="#" class="btn btn-primary" style="padding:0.6rem 1.4rem;font-size:0.75rem;">Aloita</a>
-  </nav>
+<canvas id="stars"></canvas>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-orb"></div>
-    <div class="hero-corner tl"></div>
-    <div class="hero-corner tr"></div>
-    <div class="hero-corner bl"></div>
-    <div class="hero-corner br"></div>
+<nav>
+  <div class="logo">Pohjoinen <span>Valo</span></div>
+  <ul>
+    <li><a href="#luonto">Luonto</a></li>
+    <li><a href="#tilastot">Tilastot</a></li>
+    <li><a href="#artikkelit">Artikkelit</a></li>
+    <li><a href="#yhteystiedot">Yhteystiedot</a></li>
+  </ul>
+</nav>
 
-    <div>
-      <p class="hero-tag">⬡ &nbsp; Tulevaisuuden teknologia &nbsp; ⬡</p>
-      <h1>Astuu <span class="accent">Uuteen</span><br>Aikakauteen</h1>
-      <p class="hero-sub">Rakennamme digitaalisia ratkaisuja, jotka ylittävät rajat. Tekoäly, data ja design — yhdistettynä täydellisesti.</p>
-      <div class="btn-group">
-        <a href="#" class="btn btn-primary">Tutustu palveluihin</a>
-        <a href="#" class="btn btn-outline">Lue lisää</a>
-      </div>
-    </div>
-  </section>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-aurora"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Suomen luonnon ihmeisiin</p>
+    <h1>Pohjoinen<br><em>Valo</em></h1>
+    <p class="hero-sub">
+      Matkaa Suomen salaisiin metsiin, järvien rannoille ja revontulia hohkaaviin öihin.
+      Tämä on paikka, jossa luonto puhuu hiljaa — mutta sanoo kaiken.
+    </p>
+    <div class="hero-line"></div>
+  </div>
+  <div class="scroll-hint">Vieritä</div>
+</section>
 
-  <!-- STATS -->
-  <div class="stats-bar">
-    <div class="stat">
-      <span class="stat-number">98%</span>
-      <span class="stat-label">Asiakastyytyväisyys</span>
+<div class="divider"></div>
+
+<!-- FEATURES -->
+<section class="features" id="luonto">
+  <p class="section-label">Suomen ainutlaatuisuus</p>
+  <h2 class="section-title">Maa tuhansien järvien<br>ja hiljaisuuden</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🌲</div>
+      <h3 class="feature-title">Ikimetsät</h3>
+      <p class="feature-desc">Suomen metsät peittävät yli 75% maan pinta-alasta. Nämä ikimetsät ovat kotona tuhansille lajeille ja tarjoavat rauhaa, jollaista harvoin löytää muualta maailmasta.</p>
     </div>
-    <div class="stat">
-      <span class="stat-number">500+</span>
-      <span class="stat-label">Projektia toteutettu</span>
+    <div class="feature-card">
+      <div class="feature-icon">✨</div>
+      <h3 class="feature-title">Revontulet</h3>
+      <p class="feature-desc">Lapissa revontulet tanssivat taivaalla yli 200 yönä vuodessa. Vihreät, violetit ja punaiset valot kietovat katsojan hiljaiseen lumoon, jota sanat tuskin kuvaavat.</p>
     </div>
-    <div class="stat">
-      <span class="stat-number">12v</span>
-      <span class="stat-label">Kokemus alalta</span>
+    <div class="feature-card">
+      <div class="feature-icon">🦌</div>
+      <h3 class="feature-title">Villieläimet</h3>
+      <p class="feature-desc">Susi, karhu, ahma ja ilves vaeltavat Suomen erämaissa. Porot kuljeksivat Lapin tuntureilla vapaasti, ja satoja lintulajeja täyttää taivaan vuodenajan mukaan.</p>
     </div>
-    <div class="stat">
-      <span class="stat-number">24/7</span>
-      <span class="stat-label">Tuki ja ylläpito</span>
+    <div class="feature-card">
+      <div class="feature-icon">🌊</div>
+      <h3 class="feature-title">Järvimaisema</h3>
+      <p class="feature-desc">Suomessa on lähes 188 000 järveä. Kesällä kirkas vesi heijastaa taivaan, talvella järvet muuttuvat peiliksi jäähän — ja kumpikin on yhtä kaunis.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">❄️</div>
+      <h3 class="feature-title">Talven hiljaisuus</h3>
+      <p class="feature-desc">Luminen metsä on maailman hiljaisin paikka. Jokainen askel vaimentuu, hengitys höyryää kylmässä ilmassa, ja jokin syvällä ihmisessä herää rauhaan.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">☀️</div>
+      <h3 class="feature-title">Yötön yö</h3>
+      <p class="feature-desc">Kesäkuussa aurinko ei laske Lapissa ollenkaan. Yötön yö on suomalaisen luonnon ihmeitä — valoisa ja uninen samaan aikaan, kuin aika olisi pysähtynyt.</p>
     </div>
   </div>
+</section>
 
-  <!-- PALVELUT -->
-  <section id="palvelut">
-    <div class="container">
-      <p class="section-label">// Palvelut</p>
-      <h2>Mitä me teemme</h2>
-      <p class="section-desc">Tarjoamme kattavan valikoiman digitaalisia palveluja — suunnittelusta toteutukseen.</p>
+<div class="divider"></div>
 
-      <div class="cards">
-        <div class="card">
-          <span class="card-icon">⬡</span>
-          <h3>Tekoäly & Data</h3>
-          <p>Räätälöidyt tekoälyratkaisut, jotka automatisoivat prosesseja ja tuottavat arvokkaita oivalluksia datasta.</p>
-        </div>
-        <div class="card">
-          <span class="card-icon">◈</span>
-          <h3>Web-kehitys</h3>
-          <p>Nopeita, moderneja verkkosovelluksia, jotka toimivat saumattomasti kaikilla alustoilla.</p>
-        </div>
-        <div class="card">
-          <span class="card-icon">◉</span>
-          <h3>UI/UX Suunnittelu</h3>
-          <p>Käyttöliittymät, jotka eivät vain näytä upealta — ne tuntuvat intuitiivisilta käyttää.</p>
-        </div>
-        <div class="card">
-          <span class="card-icon">⊕</span>
-          <h3>Pilvipalvelut</h3>
-          <p>Skaalautuvat pilviinfrastruktuurit, jotka kasvavat liiketoimintasi mukana ilman kompromisseja.</p>
-        </div>
-        <div class="card">
-          <span class="card-icon">⌬</span>
-          <h3>Kyberturvallisuus</h3>
-          <p>Monikerroksinen suoja digitaalisille resursseillesi uhkia ja haavoittuvuuksia vastaan.</p>
-        </div>
-        <div class="card">
-          <span class="card-icon">⊗</span>
-          <h3>Konsultointi</h3>
-          <p>Strateginen kumppanuus digitaalisen transformaation suunnitteluun ja johtamiseen.</p>
-        </div>
-      </div>
+<!-- STATS -->
+<section class="stats" id="tilastot">
+  <div class="stats-inner">
+    <div>
+      <div class="stat-num">188K</div>
+      <div class="stat-label">Järveä</div>
     </div>
-  </section>
-
-  <!-- TEKNOLOGIA -->
-  <section id="teknologia" style="background: #050a0f;">
-    <div class="container">
-      <div class="feature-split">
-        <!-- VISUAL -->
-        <div class="feature-visual">
-          <div class="hex-ring">
-            <div class="orbit-dot"></div>
-          </div>
-          <div class="hex-ring">
-            <div class="orbit-dot"></div>
-          </div>
-          <div class="hex-ring"></div>
-          <div class="hex-core">⚡</div>
-        </div>
-
-        <!-- TEXT -->
-        <div>
-          <p class="section-label">// Teknologia</p>
-          <h2>Huipputeknologiaa käytössäsi</h2>
-          <p class="section-desc">Hyödynnämme uusimpia teknologioita, jotta ratkaisumme pysyvät aina askeleen edellä kilpailua.</p>
-          <ul class="feature-list">
-            <li>Koneoppimismallien kehitys ja käyttöönotto</li>
-            <li>Reaaliaikainen datankäsittely ja analytiikka</li>
-            <li>Mikropalveluarkkitehtuuri ja kontaineriointi</li>
-            <li>Edge computing ja hajautettu laskenta</li>
-            <li>Kvanttiresistentti salausprotokolla</li>
-          </ul>
-        </div>
-      </div>
+    <div>
+      <div class="stat-num">75%</div>
+      <div class="stat-label">Metsää</div>
     </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="cta-section" id="yhteystiedot">
-    <div class="container">
-      <p class="section-label">// Ota yhteyttä</p>
-      <h2>Valmis aloittamaan?</h2>
-      <p style="color:#556677;margin-bottom:2.5rem;font-size:1rem;max-width:440px;margin-inline:auto;line-height:1.7;">
-        Kerro meille projektistasi ja rakennetaan yhdessä jotain poikkeuksellista.
-      </p>
-      <div class="btn-group">
-        <a href="mailto:hei@neonhorizon.fi" class="btn btn-primary">Lähetä viesti</a>
-        <a href="#" class="btn btn-outline">Varaa tapaaminen</a>
-      </div>
+    <div>
+      <div class="stat-num">200+</div>
+      <div class="stat-label">Revontuliöitä / vuosi</div>
     </div>
-  </section>
+    <div>
+      <div class="stat-num">40</div>
+      <div class="stat-label">Kansallispuistoa</div>
+    </div>
+  </div>
+</section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="logo">NEON<span>HORIZON</span></div>
-    <span>© 2026 NeonHorizon. Kaikki oikeudet pidätetään.</span>
-    <span style="color:#223344">Helsinki, Suomi</span>
-  </footer>
+<div class="divider"></div>
 
+<!-- ARTICLES -->
+<section class="articles" id="artikkelit">
+  <p class="section-label">Tuoreet kirjoitukset</p>
+  <h2 class="section-title">Tarinoita erämaasta</h2>
+  <div class="article-grid">
+
+    <div class="article-card featured">
+      <p class="article-tag">Erämaa — Lappi</p>
+      <h3 class="article-title">Kolmen päivän vaellus Pallastunturilla — mitä metsä opetti minulle</h3>
+      <p class="article-excerpt">Lähdin reppu selässä ilman puhelinta. Kolmen päivän aikana opin enemmän hiljaisuudesta kuin vuosiin aiemmin. Tunturipolku ei kysy lupaa — se ottaa sinut ja vie.</p>
+      <p class="article-meta">Kirjoittanut Miia Korhonen · 18. toukokuuta 2026</p>
+    </div>
+
+    <div class="article-card">
+      <p class="article-tag">Eläimet</p>
+      <h3 class="article-title">Suden jäljillä Kainuun metsissä</h3>
+      <p class="article-excerpt">Luminen polku paljasti tarinan — neljä tassunjälkeä, suoraan ja päättäväisesti eteenpäin.</p>
+      <p class="article-meta">Kirjoittanut Juhani Mäkinen · 2. toukokuuta 2026</p>
+    </div>
+
+    <div class="article-card">
+      <p class="article-tag">Revontulet</p>
+      <h3 class="article-title">Paras aika nähdä revontulet — opas aloittelijalle</h3>
+      <p class="article-excerpt">Lokakuusta maaliskuuhun taivas tarjoaa spektaakkelin. Tässä kaikki mitä tarvitset tietää.</p>
+      <p class="article-meta">Kirjoittanut Saara Virtanen · 28. huhtikuuta 2026</p>
+    </div>
+
+    <div class="article-card">
+      <p class="article-tag">Järvet</p>
+      <h3 class="article-title">Saimaa — Euroopan neljäs suurin järvi odottaa</h3>
+      <p class="article-excerpt">Norppa ui pintaan ja laskeva aurinko värjää veden oranssiksi. Saimaa ei kiiruhda, eikä sinunkaan tarvitse.</p>
+      <p class="article-meta">Kirjoittanut Eero Leinonen · 10. huhtikuuta 2026</p>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- QUOTE -->
+<section class="quote-section">
+  <p class="big-quote">Suomalainen metsä ei ole pelkkä puu. Se on muisti, hengitys ja koti — kaikki samaan aikaan.</p>
+  <p class="quote-author">— Pohjoinen Valo, toimitus</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- FOOTER -->
+<footer id="yhteystiedot">
+  <div class="footer-logo">Pohjoinen Valo</div>
+  <p class="footer-copy">© 2026 Pohjoinen Valo. Kaikki oikeudet pidätetään.</p>
+  <div class="footer-links">
+    <a href="#">Tietoa meistä</a>
+    <a href="#">Yhteystiedot</a>
+    <a href="#">Tietosuoja</a>
+  </div>
+</footer>
+
+<script>
+  // Starfield
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function initStars() {
+    stars = [];
+    for (let i = 0; i < 180; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.2 + 0.2,
+        o: Math.random() * 0.6 + 0.1,
+        speed: Math.random() * 0.0005 + 0.0002,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function drawStars(t) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const s of stars) {
+      const opacity = s.o * (0.6 + 0.4 * Math.sin(t * s.speed + s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(126, 200, 240, ${opacity})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(drawStars);
+  }
+
+  resize();
+  initStars();
+  window.addEventListener('resize', () => { resize(); initStars(); });
+  requestAnimationFrame(drawStars);
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.feature-card, .article-card, .stat-num').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+</script>
 </body>
 </html>
