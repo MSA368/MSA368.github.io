@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Maahanmuutto Suomessa – Tosiasiat, Haasteet ja Tulevaisuus</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet"/>
+  
   <style>
     :root {
       --navy: #0d1b2a;
@@ -23,7 +23,7 @@
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Source Serif 4', Georgia, serif;
+      font-family: Georgia, 'Times New Roman', serif;
       background: var(--white);
       color: var(--text);
       line-height: 1.75;
@@ -68,24 +68,24 @@
     }
 
     .hero-eyebrow {
-      font-family: 'Source Serif 4', serif;
+      font-family: Georgia, 'Times New Roman', serif;
       font-size: 0.85rem;
       letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--accent);
       margin-bottom: 22px;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.2s forwards;
+      opacity: 1;
+      animation: fadeUp 0.8s 0.2s both;
     }
 
     .hero-title {
-      font-family: 'Playfair Display', serif;
+      font-family: Georgia, 'Times New Roman', serif;
       font-size: clamp(2.6rem, 6vw, 5rem);
       font-weight: 900;
       line-height: 1.1;
       margin-bottom: 28px;
-      opacity: 0;
-      animation: fadeUp 0.9s 0.4s forwards;
+      opacity: 1;
+      animation: fadeUp 0.9s 0.4s both;
     }
 
     .hero-title em {
@@ -99,8 +99,8 @@
       max-width: 620px;
       color: var(--muted);
       line-height: 1.8;
-      opacity: 0;
-      animation: fadeUp 0.9s 0.6s forwards;
+      opacity: 1;
+      animation: fadeUp 0.9s 0.6s both;
     }
 
     .hero-stats {
@@ -108,13 +108,13 @@
       gap: 50px;
       margin-top: 60px;
       flex-wrap: wrap;
-      opacity: 0;
-      animation: fadeUp 0.9s 0.8s forwards;
+      opacity: 1;
+      animation: fadeUp 0.9s 0.8s both;
     }
 
     .hero-stat strong {
       display: block;
-      font-family: 'Playfair Display', serif;
+      font-family: Georgia, 'Times New Roman', serif;
       font-size: 2.4rem;
       color: var(--accent);
     }
@@ -178,7 +178,7 @@
     }
 
     h2 {
-      font-family: 'Playfair Display', serif;
+      font-family: Georgia, 'Times New Roman', serif;
       font-size: clamp(1.9rem, 4vw, 2.9rem);
       font-weight: 700;
       line-height: 1.2;
@@ -187,7 +187,7 @@
     }
 
     h3 {
-      font-family: 'Playfair Display', serif;
+      font-family: Georgia, 'Times New Roman', serif;
       font-size: 1.5rem;
       font-weight: 700;
       color: var(--blue);
@@ -215,7 +215,7 @@
 
     blockquote::before {
       content: '"';
-      font-family: 'Playfair Display', serif;
+      font-family: Georgia, 'Times New Roman', serif;
       font-size: 5rem;
       color: var(--accent);
       opacity: 0.3;
@@ -254,7 +254,7 @@
     .stat-card:hover { transform: translateY(-4px); }
 
     .stat-card .num {
-      font-family: 'Playfair Display', serif;
+      font-family: Georgia, 'Times New Roman', serif;
       font-size: 2.4rem;
       color: var(--accent);
       line-height: 1;
@@ -279,7 +279,7 @@
     }
 
     .info-box h4 {
-      font-family: 'Playfair Display', serif;
+      font-family: Georgia, 'Times New Roman', serif;
       font-size: 1.1rem;
       color: var(--navy);
       margin-bottom: 10px;
@@ -299,7 +299,7 @@
     }
 
     .warn-box h4 {
-      font-family: 'Playfair Display', serif;
+      font-family: Georgia, 'Times New Roman', serif;
       color: #8a6800;
       margin-bottom: 8px;
     }
@@ -313,7 +313,7 @@
     }
 
     thead tr { background: var(--navy); color: var(--white); }
-    thead th { padding: 14px 16px; text-align: left; font-family: 'Playfair Display', serif; font-weight: 400; letter-spacing: 0.05em; }
+    thead th { padding: 14px 16px; text-align: left; font-family: Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: 0.05em; }
     tbody tr:nth-child(even) { background: rgba(26,58,92,0.04); }
     tbody tr:hover { background: rgba(200,168,75,0.08); }
     tbody td { padding: 12px 16px; border-bottom: 1px solid rgba(0,0,0,0.07); }
@@ -325,7 +325,7 @@
     .col-box { padding: 24px; border-radius: 2px; }
     .col-box.neg { background: #fff3f3; border-top: 4px solid #c0392b; }
     .col-box.pos { background: #f3fff5; border-top: 4px solid #27ae60; }
-    .col-box h4 { font-family: 'Playfair Display', serif; margin-bottom: 14px; }
+    .col-box h4 { font-family: Georgia, 'Times New Roman', serif; margin-bottom: 14px; }
     .col-box.neg h4 { color: #922b21; }
     .col-box.pos h4 { color: #1e8449; }
     .col-box ul { padding-left: 20px; }
@@ -350,7 +350,7 @@
 
     footer h3 {
       color: var(--white);
-      font-family: 'Playfair Display', serif;
+      font-family: Georgia, 'Times New Roman', serif;
       font-size: 1.4rem;
       margin-bottom: 12px;
     }
@@ -371,8 +371,8 @@
     }
 
     .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
+      opacity: 1;
+      
       transition: opacity 0.7s ease, transform 0.7s ease;
     }
 
@@ -576,4 +576,4 @@
     </div>
 
     <h3>Asumiskustannukset ja tukiasuminen</h3>
-    <p>Maahanmuuttaj
+    <p>Maahanmuuttajat — erityisesti turvapaikanhakijat — sijoittuvat usein julkiseen asuntokantaan ja asumistuen piiriin. Helsingissä ulkom
