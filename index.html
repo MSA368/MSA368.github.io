@@ -1,116 +1,666 @@
 <!DOCTYPE html>
-<html lang="fi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sivuston Otsikko</title>
-    <style>
-        /* Tummansininen ja musta teema */
-        :root {
-            --bg-color: #0b0f19;       /* Erittäin tumma mustansininen tausta */
-            --card-bg: #161f33;        /* Tummasininen laatikon tausta */
-            --primary-blue: #1e40af;   /* Selkeä sininen korostusväri */
-            --light-blue: #3b82f6;     /* Kirkas sininen linkeille ja teksteille */
-            --text-main: #f8fafc;      /* Lähes valkoinen pääteksti */
-            --text-muted: #94a3b8;     /* Harmaansininen leipäteksti */
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATMOSPHÈRE — Ambient Sound Mixer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Instrument+Mono:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-        }
+  :root {
+    --bg: #0c0d0f;
+    --surface: #13151a;
+    --surface2: #1c1f28;
+    --border: rgba(255,255,255,0.07);
+    --text: #e8e4dc;
+    --muted: rgba(232,228,220,0.4);
+    --accent: #c9a96e;
+    --accent2: #7eb8c9;
+    --accent3: #a89dc7;
+    --green: #8fbf9f;
+  }
 
-        header {
-            background-color: #030712; /* Täysin musta yläpalkki */
-            border-bottom: 3px solid var(--primary-blue);
-            padding: 20px;
-            text-align: center;
-        }
+  html, body {
+    min-height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    overflow-x: hidden;
+  }
 
-        header h1 {
-            margin: 0;
-            font-size: 2rem;
-            color: var(--light-blue);
-        }
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.5;
+  }
 
-        main {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
+  /* Ambient glow blobs */
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.12;
+    pointer-events: none;
+    transition: opacity 2s ease;
+  }
+  .blob-1 { width: 600px; height: 600px; background: var(--accent2); top: -200px; right: -100px; }
+  .blob-2 { width: 500px; height: 500px; background: var(--accent3); bottom: -150px; left: -100px; }
+  .blob-3 { width: 400px; height: 400px; background: var(--green); top: 50%; left: 40%; transform: translate(-50%,-50%); opacity: 0.07; }
 
-        .artikkeli {
-            background-color: var(--card-bg);
-            border-left: 5px solid var(--primary-blue);
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
+  header {
+    padding: 3rem 4rem 2rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    animation: fadeDown 1s ease forwards;
+  }
 
-        .artikkeli h2 {
-            color: var(--light-blue);
-            margin-top: 0;
-            font-size: 1.8rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 10px;
-        }
+  .logo {
+    font-size: 1.1rem;
+    letter-spacing: 0.35em;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--accent);
+  }
 
-        .artikkeli h3 {
-            color: var(--text-main);
-            font-size: 1.2rem;
-            margin-top: 25px;
-            margin-bottom: 5px;
-        }
+  .logo span {
+    font-style: normal;
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    margin-left: 1.5rem;
+  }
 
-        .artikkeli p {
-            color: var(--text-muted);
-            margin-top: 0;
-            text-align: justify;
-        }
+  .now-playing {
+    font-family: 'Instrument Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-top: 40px;
-        }
-    </style>
+  .pulse-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .pulse-dot.active {
+    opacity: 1;
+    animation: pulse 2s infinite;
+  }
+
+  .hero {
+    padding: 5rem 4rem 3rem;
+    max-width: 700px;
+    animation: fadeUp 1.2s ease forwards;
+    animation-delay: 0.2s;
+    opacity: 0;
+  }
+
+  h1 {
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 420px;
+    font-style: italic;
+  }
+
+  /* Mixer grid */
+  .mixer {
+    padding: 2rem 4rem 4rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5px;
+    border-top: 1px solid var(--border);
+    margin-top: 1rem;
+  }
+
+  .sound-card {
+    background: var(--surface);
+    padding: 2rem 1.8rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s ease;
+    animation: fadeUp 0.8s ease forwards;
+    opacity: 0;
+  }
+
+  .sound-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 60%, rgba(255,255,255,0.02));
+    pointer-events: none;
+  }
+
+  .sound-card:hover { background: var(--surface2); }
+
+  .sound-card.active {
+    background: var(--surface2);
+  }
+
+  .sound-card.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--card-color, var(--accent));
+    animation: growIn 0.4s ease forwards;
+  }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1.2rem;
+    display: block;
+    filter: grayscale(0.3);
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+
+  .sound-card:hover .card-icon,
+  .sound-card.active .card-icon {
+    transform: scale(1.1);
+    filter: grayscale(0);
+  }
+
+  .card-name {
+    font-size: 1.05rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+    display: block;
+  }
+
+  .card-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    display: block;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  /* Volume slider */
+  .vol-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+
+  .sound-card.active .vol-row {
+    opacity: 1;
+    transform: none;
+    pointer-events: all;
+  }
+
+  .vol-label {
+    font-family: 'Instrument Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    min-width: 22px;
+  }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    outline: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--card-color, var(--accent));
+    cursor: pointer;
+    transition: transform 0.2s;
+    box-shadow: 0 0 8px var(--card-color, var(--accent));
+  }
+
+  input[type=range]::-webkit-slider-thumb:hover {
+    transform: scale(1.3);
+  }
+
+  /* Waveform visualizer */
+  .visualizer {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 20px;
+    margin-top: 1rem;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .sound-card.active .visualizer { opacity: 1; }
+
+  .bar {
+    width: 3px;
+    background: var(--card-color, var(--accent));
+    border-radius: 2px;
+    animation: wave 1.2s ease-in-out infinite;
+    opacity: 0.7;
+  }
+
+  /* Bottom toolbar */
+  .toolbar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(12,13,15,0.92);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    padding: 1.2rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    animation: slideUp 1s ease forwards;
+    animation-delay: 0.5s;
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  .toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .active-count {
+    font-family: 'Instrument Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .active-count strong {
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  .master-vol {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'Instrument Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  .master-vol input { width: 100px; }
+  .master-vol input::-webkit-slider-thumb {
+    background: var(--text);
+    box-shadow: none;
+  }
+
+  .btn-clear {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 0.5rem 1.5rem;
+    font-family: 'Instrument Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-style: normal;
+  }
+
+  .btn-clear:hover {
+    border-color: rgba(255,255,255,0.2);
+    color: var(--text);
+  }
+
+  .scene-presets {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .preset-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 0.4rem 1rem;
+    font-family: 'Instrument Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 2px;
+  }
+
+  .preset-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Content padding for toolbar */
+  main { padding-bottom: 80px; }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes slideUp {
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes growIn {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+  @keyframes wave {
+    0%, 100% { transform: scaleY(0.3); }
+    50% { transform: scaleY(1); }
+  }
+
+  @media (max-width: 600px) {
+    header, .hero, .mixer, .toolbar { padding-left: 1.5rem; padding-right: 1.5rem; }
+    h1 { font-size: 2.8rem; }
+    .toolbar { flex-wrap: wrap; gap: 0.8rem; }
+    .scene-presets { display: none; }
+  }
+</style>
 </head>
 <body>
 
-    <header>
-        <h1>Yhteiskunnallinen Blogi</h1>
-    </header>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
 
-    <main>
-        <!-- TÄSTÄ ALKAA ARTIKKELI. VOIT KOPIOIDA TÄMÄN OSIOT UUSIA TEKSTEJÄ VARTEN -->
-        <article class="artikkeli">
-            <h2>Miksi maahanmuutto on pahaksi Suomelle</h2>
+<header>
+  <div class="logo">atmosphère <span>/ sound mixer</span></div>
+  <div class="now-playing">
+    <div class="pulse-dot" id="pulseDot"></div>
+    <span id="nowPlayingText">nothing playing</span>
+  </div>
+</header>
 
-            <h3>Kulttuuri ja arvot</h3>
-            <p>Suomalainen yhteiskunta perustuu vahvasti luottamukseen, tasa-arvoon ja lakiin. Hallitsematon maahanmuutto voi tuoda mukanaan arvoja, jotka ovat ristiriidassa näiden periaatteiden kanssa. Kansallisen kulttuurin ja kielen säilyminen nähdään tärkeänä itsenäisyyden pilarina.</p>
+<main>
+  <div class="hero">
+    <h1>Craft your <em>perfect</em> atmosphere</h1>
+    <p class="subtitle">Layer sounds from nature and the world. Mix, balance, and disappear into your own sonic space.</p>
+  </div>
 
-            <h3>Turvallisuus ja järjestys</h3>
-            <p>Monissa Euroopan maissa liian nopea maahanmuutto on johtanut segregaatioon eli asuinalueiden eriytymiseen ja jengiytymiseen. Tiukalla maahanmuuttopolitiikalla halutaan ennaltaehkäistä näitä ilmiöitä ja pitää Suomi yhtenä maailman turvallisimmista maista.</p>
+  <div class="mixer" id="mixer"></div>
+</main>
 
-            <h3>Hyvinvointivaltion kantokyky</h3>
-            <p>Suomen sosiaaliturvajärjestelmä ja julkiset palvelut, kuten terveydenhuolto ja koulutus, perustuvat veronmaksajien rahoitukseen. Jos maahanmuutto kohdistuu pääosin alhaisen koulutustason ryhmiin, se luo pitkäaikaisen rasitteen julkiselle taloudelle ja heikentää hyvinvointipalvelujen tasoa kaikille.</p>
+<div class="toolbar">
+  <div class="toolbar-left">
+    <div class="active-count"><strong id="activeCount">0</strong> sounds active</div>
+    <div class="master-vol">
+      MASTER
+      <input type="range" id="masterVol" min="0" max="1" step="0.01" value="0.7">
+    </div>
+  </div>
+  <div class="scene-presets">
+    <span style="font-family:'Instrument Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:0.08em;margin-right:0.5rem;">PRESETS</span>
+    <button class="preset-btn" onclick="loadPreset('forest')">Forest</button>
+    <button class="preset-btn" onclick="loadPreset('storm')">Storm</button>
+    <button class="preset-btn" onclick="loadPreset('cafe')">Café</button>
+    <button class="preset-btn" onclick="loadPreset('space')">Space</button>
+  </div>
+  <button class="btn-clear" onclick="clearAll()">CLEAR ALL</button>
+</div>
 
-            <h3>Kotouttamisen haasteet</h3>
-            <p>Resurssit kielenopetukseen, koulutukseen ja työllistämiseen ovat rajalliset. Liian suuret muuttomäärät vaikeuttavat tulijoiden todellista sopeutumista yhteiskuntaan, mikä voi johtaa syrjäytymiseen ja sosiaalisiin ongelmiin.</p>
-        </article>
-        <!-- TÄHÄN LOPPUU ARTIKKELI -->
-    </main>
+<script>
+const SOUNDS = [
+  { id: 'rain',      name: 'Rain',         desc: 'Soft rainfall on leaves',      icon: '🌧', color: '#7eb8c9', freq: 200,  type: 'noise', noiseType: 'pink'    },
+  { id: 'thunder',   name: 'Thunder',      desc: 'Distant rolling rumbles',      icon: '⛈', color: '#9b8dc7', freq: 60,   type: 'rumble'                       },
+  { id: 'wind',      name: 'Wind',         desc: 'Breezy through tall grass',    icon: '🌾', color: '#c9b86e', freq: 400,  type: 'noise', noiseType: 'white'   },
+  { id: 'ocean',     name: 'Ocean',        desc: 'Waves washing the shore',      icon: '🌊', color: '#4e9fbf', freq: 120,  type: 'ocean'                        },
+  { id: 'fire',      name: 'Fireplace',    desc: 'Crackling warm hearth',        icon: '🔥', color: '#d4834a', freq: 300,  type: 'noise', noiseType: 'brown'   },
+  { id: 'forest',    name: 'Forest',       desc: 'Birds and rustling canopy',    icon: '🌲', color: '#8fbf9f', freq: 800,  type: 'birds'                        },
+  { id: 'stream',    name: 'Stream',       desc: 'Babbling brook over stones',   icon: '💧', color: '#6ec9c2', freq: 600,  type: 'noise', noiseType: 'pink'    },
+  { id: 'cafe',      name: 'Café',         desc: 'Murmurs and espresso hiss',    icon: '☕', color: '#c9996e', freq: 500,  type: 'noise', noiseType: 'brown'   },
+  { id: 'space',     name: 'Deep Space',   desc: 'Vast cosmic resonance',        icon: '🌌', color: '#a89dc7', freq: 40,   type: 'drone'                        },
+  { id: 'snow',      name: 'Snowfall',     desc: 'Silence wrapped in white',     icon: '❄️', color: '#c7d8e0', freq: 50,   type: 'noise', noiseType: 'pink'    },
+  { id: 'night',     name: 'Night Insects',desc: 'Crickets under a full moon',   icon: '🦗', color: '#b0c96e', freq: 3000, type: 'insects'                      },
+  { id: 'train',     name: 'Train',        desc: 'Rhythmic journeys into dusk',  icon: '🚂', color: '#c96e6e', freq: 80,   type: 'train'                        },
+];
 
-    <footer>
-        <p>&copy; 2026 Verkkosivusto</p>
-    </footer>
+const PRESETS = {
+  forest: { rain: 0.4, forest: 0.8, stream: 0.5, wind: 0.3 },
+  storm:  { rain: 0.9, thunder: 0.6, wind: 0.7, ocean: 0.3 },
+  cafe:   { cafe: 0.8, rain: 0.2, fire: 0.3 },
+  space:  { space: 0.9, wind: 0.2, snow: 0.3, night: 0.1 },
+};
 
-</body>
-</html>
+// Web Audio setup
+const ctx = new (window.AudioContext || window.webkitAudioContext)();
+const masterGain = ctx.createGain();
+masterGain.gain.value = 0.7;
+masterGain.connect(ctx.destination);
 
+const activeSounds = {};
+
+function createNoise(type) {
+  const bufferSize = ctx.sampleRate * 4;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  if (type === 'white') {
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+  } else if (type === 'pink') {
+    let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+    for (let i = 0; i < bufferSize; i++) {
+      const w = Math.random() * 2 - 1;
+      b0=0.99886*b0+w*0.0555179; b1=0.99332*b1+w*0.0750759;
+      b2=0.96900*b2+w*0.1538520; b3=0.86650*b3+w*0.3104856;
+      b4=0.55000*b4+w*0.5329522; b5=-0.7616*b5-w*0.0168980;
+      data[i]=(b0+b1+b2+b3+b4+b5+b6+w*0.5362)/9; b6=w*0.115926;
+    }
+  } else { // brown
+    let last = 0;
+    for (let i = 0; i < bufferSize; i++) {
+      const w = Math.random() * 2 - 1;
+      data[i] = (last + 0.02 * w) / 1.02;
+      last = data[i]; data[i] *= 3.5;
+    }
+  }
+  return buffer;
+}
+
+function startSound(sound, volume = 0.5) {
+  if (ctx.state === 'suspended') ctx.resume();
+  if (activeSounds[sound.id]) return;
+
+  const gainNode = ctx.createGain();
+  gainNode.gain.value = 0;
+  gainNode.connect(masterGain);
+
+  const nodes = [gainNode];
+
+  if (sound.type === 'noise' || sound.type === 'ocean' || sound.type === 'train') {
+    const buf = createNoise(sound.noiseType || 'pink');
+    const src = ctx.createBufferSource();
+    src.buffer = buf; src.loop = true;
+
+    const filter = ctx.createBiquadFilter();
+
+    if (sound.id === 'ocean') {
+      filter.type = 'bandpass'; filter.frequency.value = 300; filter.Q.value = 0.5;
+      // LFO for wave rhythm
+      const lfo = ctx.createOscillator();
+      const lfoGain = ctx.createGain();
+      lfo.frequency.value = 0.15; lfoGain.gain.value = 0.4;
+      lfo.connect(lfoGain); lfoGain.connect(gainNode.gain);
+      lfo.start(); nodes.push(lfo);
+    } else if (sound.id === 'snow') {
+      filter.type = 'lowpass'; filter.frequency.value = 100;
+    } else if (sound.id === 'cafe') {
+      filter.type = 'bandpass'; filter.frequency.value = 600; filter.Q.value = 0.8;
+    } else if (sound.id === 'rain') {
+      filter.type = 'bandpass'; filter.frequency.value = sound.freq; filter.Q.value = 0.3;
+    } else if (sound.id === 'train') {
+      filter.type = 'lowpass'; filter.frequency.value = 150;
+    } else {
+      filter.type = 'bandpass'; filter.frequency.value = sound.freq; filter.Q.value = 0.5;
+    }
+
+    src.connect(filter); filter.connect(gainNode); src.start();
+    nodes.push(src, filter);
+
+  } else if (sound.type === 'drone' || sound.type === 'rumble') {
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = sound.freq;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass'; filter.frequency.value = sound.freq * 3;
+
+    if (sound.type === 'rumble') {
+      // Periodic rumble using LFO
+      const lfo = ctx.createOscillator();
+      const lfoG = ctx.createGain();
+      lfo.frequency.value = 0.05; lfoG.gain.value = 0.8;
+      lfo.connect(lfoG); lfoG.connect(gainNode.gain);
+      lfo.start(); nodes.push(lfo);
+    }
+
+    osc.connect(filter); filter.connect(gainNode); osc.start();
+    nodes.push(osc, filter);
+
+  } else if (sound.type === 'birds') {
+    // Multiple oscillators for bird-like tones
+    const freqs = [800, 1200, 1600, 900, 1400];
+    freqs.forEach((f, i) => {
+      const osc = ctx.createOscillator();
+      osc.type = 'sine'; osc.frequency.value = f;
+      const g = ctx.createGain(); g.gain.value = 0;
+      const lfo = ctx.createOscillator();
+      const lg = ctx.createGain();
+      lfo.frequency.value = 0.3 + i * 0.15; lg.gain.value = 0.05;
+      lfo.connect(lg); lg.connect(g.gain);
+      osc.connect(g); g.connect(gainNode); osc.start(); lfo.start();
+      nodes.push(osc, g, lfo, lg);
+    });
+    // Add noise bed
+    const buf = createNoise('pink');
+    const nSrc = ctx.createBufferSource();
+    nSrc.buffer = buf; nSrc.loop = true;
+    const nFilt = ctx.createBiquadFilter();
+    nFilt.type = 'bandpass'; nFilt.frequency.value = 1200; nFilt.Q.value = 0.3;
+    nSrc.connect(nFilt); nFilt.connect(gainNode); nSrc.start();
+    nodes.push(nSrc, nFilt);
+
+  } else if (sound.type === 'insects') {
+    // High-freq oscillator clusters
+    [3000, 3200, 2800, 3500].forEach((f, i) => {
+      const osc = ctx.createOscillator();
+      osc.type = 'sine'; osc.frequency.value = f;
+      const g = ctx.createGain(); g.gain.value = 0.015;
+      const lfo = ctx.createOscillator();
+      const lg = ctx.createGain();
+      lfo.frequency.value = 8 + i * 2; lg.gain.value = 0.01;
+      lfo.connect(lg); lg.connect(g.gain);
+      osc.connect(g); g.connect(gainNode); osc.start(); lfo.start();
+      nodes.push(osc, g, lfo, lg);
+    });
+  }
+
+  gainNode.gain.linearRampToValueAtTime(volume, ctx.currentTime + 1.5);
+  activeSounds[sound.id] = { nodes, gainNode };
+}
+
+function stopSound(id) {
+  const s = activeSounds[id];
+  if (!s) return;
+  s.gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.5);
+  setTimeout(() => {
+    s.nodes.forEach(n => { try { n.stop ? n.stop() : n.disconnect(); } catch(e){} });
+    delete activeSounds[id];
+  }, 1600);
+}
+
+function setVolume(id, vol) {
+  if (activeSounds[id]) {
+    activeSounds[id].gainNode.gain.linearRampToValueAtTime(vol, ctx.currentTime + 0.1);
+  }
+}
+
+// Render cards
+function renderCards() {
+  const mixer = document.getElementById('mixer');
+  SOUNDS.forEach((sound, i) => {
+    const card = document.createElement('div');
+    card.className = 'sound-card';
+    card.id = `card-${sound.id}`;
+    card.style.setProperty('--card-color', sound.color);
+    card.style.animationDelay = `${0.4 + i * 0.06}s`;
+
+    // Random wave bars
+    const bars = Array.from({length: 8}, (_, j) => {
+      const delay = (j * 0.15).toFixed(2);
+      const height = (20 + Math.random() * 60).toFixed(0);
+      return `<div class="bar" style="height:${height}%;animation-delay:${delay}s"></div>`;
+    }).join('');
+
+    card.innerHTML = `
+      <span class="card-icon">${sound.icon}</span>
+      <span class="card-name">${sound.name}</span>
+      <span class="card-desc">${sound.desc}</span>
+      <div class="vol-row" onclick="event.stopPropagation()">
+        <span class="vol-label">VOL</span>
+        <input type="range" min="0.01" max="1" step="0.01" value="0.5"
+               id="vol-${sound.id}"
+               oninput="setVolume('${sound.id}', parseFloat(this.value))">
+      </div>
+      <div class="visualizer">${bars}</div>
+    `;
+
+    card.addEventListener('click', () => toggleSound(sound, card));
+    mixer.appendChild(card);
+  });
+}
+
+function toggleSound(sound, card) {
+  const isActive = card.classList.contains('active');
+  if (isActive) {
+    card.classList.remove('active');
+    stopSound(sound.id);
+  } else {
+    card.classList.add('active')
