@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Maahanmuutto Suomessa</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Georgia,'Times New Roman',serif;background:#fdfaf4;color:#1a1610;line-height:1.75;}
+a{color:#1a3a5c;}
+
+/* HERO */
+.hero{background:#0d1b2a;color:#fdfaf4;padding:70px 30px 60px;}
+.hero-label{font-size:0.78rem;letter-spacing:0.25em;text-transform:uppercase;color:#c8a84b;margin-bottom:18px;}
+.hero h1{font-size:clamp(2.2rem,6vw,4.2rem);font-weight:bold;line-height:1.1;margin-bottom:20px;}
+.hero h1 em{color:#c8a84b;font-style:italic;}
+.hero p{font-size:1.05rem;color:#d4cfc4;max-width:600px;margin-bottom:40px;}
+.hero-stats{display:flex;gap:40px;flex-wrap:wrap;}
+.hero-stats div strong{display:block;font-size:2rem;color:#c8a84b;}
+.hero-stats div span{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:#d4cfc4;}
+
+/* NAV */
+nav{background:#1a3a5c;position:sticky;top:0;z-index:99;overflow-x:auto;white-space:nowrap;}
+nav a{display:inline-block;color:#d4cfc4;text-decoration:none;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;padding:15px 14px;border-bottom:3px solid transparent;}
+nav a:hover{color:#c8a84b;border-bottom-color:#c8a84b;}
+
+/* MAIN */
+main{max-width:840px;margin:0 auto;padding:0 24px;}
+section{padding:60px 0 50px;border-bottom:1px solid #ddd;}
+section:last-child{border-bottom:none;}
+.sec-label{font-size:0.75rem;letter-spacing:0.25em;text-transform:uppercase;color:#c8a84b;margin-bottom:12px;font-weight:bold;}
+h2{font-size:clamp(1.6rem,3.5vw,2.4rem);color:#0d1b2a;margin-bottom:22px;line-height:1.2;}
+h3{font-size:1.25rem;color:#1a3a5c;margin:36px 0 12px;}
+p{font-size:1.02rem;margin-bottom:16px;max-width:760px;}
+mark{background:rgba(200,168,75,0.25);padding:1px 4px;}
+
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:28px 0;}
+.stat-card{background:#0d1b2a;color:#fdfaf4;padding:24px 20px;border-top:4px solid #c8a84b;}
+.stat-card .num{font-size:2rem;color:#c8a84b;font-weight:bold;margin-bottom:6px;}
+.stat-card .lbl{font-size:0.75rem;color:#d4cfc4;text-transform:uppercase;letter-spacing:0.08em;}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;margin:24px 0;font-size:0.95rem;}
+thead tr{background:#0d1b2a;color:#fdfaf4;}
+th{padding:12px 14px;text-align:left;}
+td{padding:10px 14px;border-bottom:1px solid #ddd;}
+tr:nth-child(even){background:#f5f0e8;}
+
+/* BLOCKQUOTE */
+blockquote{margin:32px 0;padding:24px 28px;border-left:5px solid #c8a84b;background:#f5f0e8;font-style:italic;font-size:1.08rem;color:#0d1b2a;}
+blockquote cite{display:block;margin-top:10px;font-style:normal;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;color:#2c5f8a;}
+
+/* INFO BOX */
+.info-box{background:#f5f0e8;border-left:5px solid #2c5f8a;padding:24px 28px;margin:24px 0;}
+.info-box h4{color:#0d1b2a;margin-bottom:10px;font-size:1.05rem;}
+.info-box p{font-size:0.95rem;margin-bottom:6px;}
+
+/* WARN BOX */
+.warn-box{background:#fff8ee;border-left:5px solid #c8a84b;padding:20px 24px;margin:24px 0;}
+.warn-box h4{color:#8a6800;margin-bottom:8px;}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:24px 0;}
+@media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+.col-neg{background:#fff3f3;border-top:4px solid #c0392b;padding:20px;}
+.col-pos{background:#f3fff5;border-top:4px solid #27ae60;padding:20px;}
+.col-neg h4{color:#922b21;margin-bottom:10px;}
+.col-pos h4{color:#1e8449;margin-bottom:10px;}
+ul{padding-left:20px;}
+li{margin-bottom:6px;font-size:0.97rem;}
+
+/* TIMELINE */
+.timeline{border-left:3px solid #c8a84b;padding-left:28px;margin:28px 0;}
+.tl-item{margin-bottom:30px;position:relative;}
+.tl-item::before{content:'';position:absolute;left:-36px;top:5px;width:13px;height:13px;border-radius:50%;background:#c8a84b;border:2px solid #0d1b2a;}
+.tl-year{font-weight:bold;color:#1a3a5c;margin-bottom:4px;}
+.tl-text{font-size:0.97rem;}
+
+/* FOOTER */
+footer{background:#0d1b2a;color:#d4cfc4;padding:44px 30px;text-align:center;}
+footer h3{color:#fdfaf4;margin-bottom:12px;}
+footer p{font-size:0.85rem;max-width:580px;margin:6px auto;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <p class="hero-label">Kattava katsaus · Suomi 2024–2025</p>
+  <h1>Maahanmuutto<br><em>Suomessa</em></h1>
+  <p>Haasteet, kustannukset, rikollisuus, kotoutuminen ja yhteiskunnan tulevaisuus — dataan ja tutkimukseen perustuva katsaus.</p>
+  <div class="hero-stats">
+    <div><strong>~8 %</strong><span>väestöstä ulkomaalaistaustaisia</span></div>
+    <div><strong>~600 M€</strong><span>turvapaikkaprosessin kulut / v</span></div>
+    <div><strong>2,5×</strong><span>korkeampi vankilaprosentti ei-länsimaisilla</span></div>
+  </div>
+</div>
+
+<nav>
+  <a href="#historia">Historia</a>
+  <a href="#nykytila">Nykytila</a>
+  <a href="#talous">Talous</a>
+  <a href="#rikollisuus">Rikollisuus</a>
+  <a href="#kotouttaminen">Kotoutuminen</a>
+  <a href="#hyvinvointi">Hyvinvointi</a>
+  <a href="#kulttuuri">Kulttuuri</a>
+  <a href="#politiikka">Politiikka</a>
+  <a href="#tulevaisuus">Tulevaisuus</a>
+</nav>
+
+<main>
+
+<!-- JOHDANTO -->
+<section id="johdanto">
+  <p class="sec-label">Johdanto</p>
+  <h2>Miksi maahanmuutto on tärkeä aihe?</h2>
+  <p>Suomi on muuttunut viimeisten kolmen vuosikymmenen aikana lähes yksikielisestä ja -kulttuurisesta maasta monimuotoisemmaksi yhteiskunnaksi. Tämä muutos herättää voimakkaita tunteita puolesta ja vastaan. Tällä sivulla esitetään tiivistetysti, mitä tutkimustieto ja viralliset tilastot kertovat erityisesti maahanmuuton <mark>haasteista ja kustannuksista</mark>.</p>
+  <p>Lähteinä on käytetty Tilastokeskusta, Maahanmuuttovirastoa (Migri), THL:ää, VATT:ia, KRIMOa, Rikosseuraamuslaitosta sekä Suojelupoliisia. Kaikki luvut ovat suuntaa-antavia.</p>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="num">465 000</div><div class="lbl">Ulkomaan kansalaista Suomessa (2023)</div></div>
+    <div class="stat-card"><div class="num">~31 000</div><div class="lbl">Turvapaikkahakemusta vuonna 2023</div></div>
+    <div class="stat-card"><div class="num">~155 000</div><div class="lbl">Ukrainalaista tilapäissuojelun piirissä</div></div>
+    <div class="stat-card"><div class="num">50 %</div><div class="lbl">Työllistymisaste ei-länsim. miehet 5 v. jälkeen</div></div>
+  </div>
+</section>
+
+<!-- HISTORIA -->
+<section id="historia">
+  <p class="sec-label">Historia</p>
+  <h2>Suomen maahanmuuton historia lyhyesti</h2>
+  <p>Suomi oli pitkään siirtolaisuuden <em>lähtömaa</em>. Sodan jälkeen sadat tuhannet suomalaiset muuttivat Ruotsiin ja Pohjois-Amerikkaan. Varsinainen maahanmuutto alkoi merkittävänä vasta 1990-luvulla.</p>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-year">1990–1991</div>
+      <div class="tl-text">Neuvostoliiton hajoaminen toi ensimmäiset isommat maahanmuuttoaallot: inkerinsuomalaiset paluumuuttajat ja somalialaiset turvapaikanhakijat. Suomella ei ollut juurikaan valmiuksia vastaanottaa pakolaisia.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1995</div>
+      <div class="tl-text">Suomi liittyy EU:hun. Vapaa liikkuvuus avaa mahdollisuuden EU-kansalaisille muuttaa Suomeen ilman erillistä lupaa.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2000-luku</div>
+      <div class="tl-text">Kasvu tasaista. Suurimmat ryhmät ovat virolaisia, venäläisiä ja somaleja. Maahanmuuttajien määrä kaksinkertaistuu vuosikymmenen aikana.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2015–2016</div>
+      <div class="tl-text"><mark>Euroopan pakolaiskriisi.</mark> Suomeen saapuu yli 32 000 turvapaikanhakijaa, enimmäkseen Irakista, Somaliasta ja Afganistanista. Myöntöaste jää alle 20 prosenttiin. Kriisi nostaa maahanmuuttokeskustelun poliittiseen keskiöön.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2022–2023</div>
+      <div class="tl-text">Venäjän hyökkäys Ukrainaan käynnistää Euroopan suurimman pakolaisvirran sitten toisen maailmansodan. Suomi ottaa yli 50 000 ukrainalaista tilapäissuojelun piiriin.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2023–2024</div>
+      <div class="tl-text">Orpon hallitus toteuttaa historiallisesti tiukimman maahanmuuttopolitiikan muutoksen: hakemuskäsittely nopeutuu, tuet leikkautuvat, käännytyskäytännöt tiukkenevat. Venäjä ohjaa maahanmuuttajia Suomen itärajalle hybridivaikuttamisena — raja suljetaan.</div>
+    </div>
+  </div>
+</section>
+
+<!-- NYKYTILA -->
+<section id="nykytila">
+  <p class="sec-label">Nykytila</p>
+  <h2>Ketkä Suomeen muuttavat ja mistä?</h2>
+  <p>Maahanmuutto on hyvin moninaista: suurin osa muuttajista on EU-kansalaisia, opiskelijoita tai työvoimamuuttajia. Humanitaarinen maahanmuutto — turvapaikanhakijat ja pakolaiset — on määrällisesti pienempi osa, mutta suhteellisesti kustannus- ja kotoutumisvaikutusten kannalta merkittävin.</p>
+  <h3>Suurimmat kansalaisuusryhmät (2023)</h3>
+  <table>
+    <thead><tr><th>Maa</th><th>Henkilöitä</th><th>Osuus</th><th>Huomio</th></tr></thead>
+    <tbody>
+      <tr><td>Viro</td><td>~90 000</td><td>~19 %</td><td>Korkea työllistymisaste</td></tr>
+      <tr><td>Venäjä</td><td>~80 000</td><td>~17 %</td><td>Osittain paluumuuttajia</td></tr>
+      <tr><td>Ukraina</td><td>~55 000+</td><td>~12 %</td><td>Tilapäissuojelu 2022–</td></tr>
+      <tr><td>Somalia</td><td>~20 000</td><td>~4 %</td><td>Matala työllistymisaste</td></tr>
+      <tr><td>Irak</td><td>~17 000</td><td>~3,6 %</td><td>Suuri 2015 jälkeen</td></tr>
+      <tr><td>Afganistan</td><td>~10 000</td><td>~2 %</td><td>Kasvava ryhmä</td></tr>
+      <tr><td>Muut</td><td>~193 000</td><td>~41 %</td><td>EU-maat, Aasia ym.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- TALOUS -->
+<section id="talous">
+  <p class="sec-label">Taloudelliset vaikutukset</p>
+  <h2>Maahanmuuton taloudelliset haasteet</h2>
+  <p>Maahanmuuton taloudellinen kokonaisvaikutus riippuu vahvasti <em>maahanmuuttajaryhmästä</em>. EU-alueelta tuleva työvoimamuuttaja on yleensä nettomaksaja. Sen sijaan humanitaarinen maahanmuuttaja — etenkin kun kotoutuminen epäonnistuu — aiheuttaa merkittäviä julkisia kustannuksia.</p>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="num">~750 M€</div><div class="lbl">Maahanmuuttoon liittyvät julkiset kulut / vuosi (arvio 2023)</div></div>
+    <div class="stat-card"><div class="num">~18 000€</div><div class="lbl">Turvapaikanhakijan kulut / henkilö / vuosi</div></div>
+    <div class="stat-card"><div class="num">~10 v.</div><div class="lbl">Aika jolloin humanitaarinen muuttaja saavuttaa nettomaksaja-aseman (VATT)</div></div>
+    <div class="stat-card"><div class="num">30–40 %</div><div class="lbl">Somalialaistaustaisten työllistymisaste vielä 10 vuoden jälkeen</div></div>
+  </div>
+  <h3>Työllistymisaste kansalaisuusryhmittäin</h3>
+  <div class="info-box">
+    <h4>📊 Työllistymisaste (Tilastokeskus / VATT 2019–2022)</h4>
+    <p><strong>Virolaiset:</strong> ~75 % — lähes kantaväestön tasolla</p>
+    <p><strong>Venäläiset:</strong> ~65 %</p>
+    <p><strong>Irakilaiset:</strong> ~40–50 % viiden vuoden jälkeen</p>
+    <p><strong>Somalialaiset:</strong> ~30–40 % jopa pitkän ajan jälkeen</p>
+    <p><strong>Afganistanilaiset:</strong> ~45 %</p>
+  </div>
+  <h3>Sosiaaliturvan käyttö</h3>
+  <p>Kelan tilastojen mukaan ulkomaalaistaustaiset henkilöt käyttävät toimeentulotukea suhteellisesti selvästi enemmän kuin kantaväestö.</p>
+  <table>
+    <thead><tr><th>Ryhmä</th><th>Toimeentulotuen saajat %</th><th>Suhde kantaväestöön</th></tr></thead>
+    <tbody>
+      <tr><td>Kantaväestö</td><td>~4–5 %</td><td>—</td></tr>
+      <tr><td>Eurooppalaistaustaiset</td><td>~7–10 %</td><td>~2×</td></tr>
+      <tr><td>Lähi-itäläistaustaiset</td><td>~35–50 %</td><td>~8–10×</td></tr>
+      <tr><td>Afrikkalaistaustaiset</td><td>~40–55 %</td><td>~9–11×</td></tr>
+    </tbody>
+  </table>
+  <div class="warn-box">
+    <h4>⚠️ Huomio lukujen tulkinnasta</h4>
+    <p>Korkea toimeentulotukiriippuvuus ei selity pelkällä taustalla — vaikuttavat myös kielimuuri, koulutuksen tunnustaminen ja vastaanottojärjestelmän rakenne. Tilastollinen ero kantaväestöön on kuitenkin erittäin suuri.</p>
+  </div>
+</section>
+
+<!-- RIKOLLISUUS -->
+<section id="rikollisuus">
+  <p class="sec-label">Rikollisuus ja turvallisuus</p>
+  <h2>Maahanmuutto ja rikollisuus — mitä tilastot kertovat?</h2>
+  <p>Aihe on herkkä, mutta olemassa oleva tutkimustieto on tärkeää esittää rehellisesti. Suomessa aihetta on tutkittu mm. Kriminologian ja oikeuspolitiikan instituutissa (KRIMO) sekä Tilastokeskuksessa.</p>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="num">~20 %</div><div class="lbl">Ulkomaankansalaisten osuus vangeista (2023)</div></div>
+    <div class="stat-card"><div class="num">2,5×</div><div class="lbl">Yliedustus vankiloissa suhteessa väestöosuuteen</div></div>
+    <div class="stat-card"><div class="num">~60 %</div><div class="lbl">Raiskaustuomioista tekijä ulkomaalaistaustainen (KRIMOn arvio)</div></div>
+  </div>
+  <h3>Seksuaalirikokset</h3>
+  <p>KRIMOn tutkimukset ovat osoittaneet, että seksuaalirikoksissa maahanmuuttajataustaiset henkilöt ovat merkittävästi yliedustettuina. Raiskauksesta tuomittujen joukossa noin puolet tai enemmän oli ulkomaalaistaustaisia, vaikka heidän osuutensa väestöstä oli tuolloin 5–7 prosenttia.</p>
+  <blockquote>
+    "Tutkimusten mukaan ei-länsimaisista maista tulleiden miesten seksuaalirikosten tekemisriski on Suomessa moninkertainen kantaväestöön verrattuna. Tämä on vakava yhteiskunnallinen haaste, joka vaatii avointa analyysia."
+    <cite>— KRIMOn tutkimuksia, 2018–2021</cite>
+  </blockquote>
+  <h3>Jengirikollisuus</h3>
+  <p>Suomessa on 2010–2020-luvuilla kasvanut monikulttuurinen jengirikollisuus. Poliisi on tunnistanut useita katujengiverkostoja erityisesti Helsingissä, Vantaalla ja Espoossa. Alaikäisiä rekrytoidaan rikosvastuun välttämiseksi.</p>
+  <div class="info-box">
+    <h4>🚔 Jengirikollisuuden piirteet Suomessa</h4>
+    <p>– Huumekauppa (kannabis, kokaiini) on tärkein tulonlähde</p>
+    <p>– Väkivaltaa käytetään reviirin puolustamiseen</p>
+    <p>– Alaikäisiä rekrytoidaan "juoksupoikina"</p>
+    <p>– Todistajiin kohdistuvat uhkaukset vaikeuttavat tutkintaa</p>
+  </div>
+  <div class="two-col">
+    <div class="col-neg">
+      <h4>❌ Haasteet</h4>
+      <ul>
+        <li>Yliedustus väkivaltarikosten tekijöissä</li>
+        <li>Selkeä yliedustus seksuaalirikoksissa</li>
+        <li>Katujengiongelman kasvu suurissa kaupungeissa</li>
+        <li>Uhrien pelottelu vaikeuttaa tutkintaa</li>
+        <li>Alaikäisten rekrytointi rikolliseen toimintaan</li>
+      </ul>
+    </div>
+    <div class="col-pos">
+      <h4>✅ Huomioitavaa</h4>
+      <ul>
+        <li>Enemmistö maahanmuuttajista ei syyllisty rikoksiin</li>
+        <li>Köyhyys ja syrjäytyminen selittävät osaa</li>
+        <li>Kotoutuneilla rikollisuus lähes kantaväestön tasolla</li>
+        <li>EU-taustaiset muuttajat vähemmän esillä rikostilastoissa</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- KOTOUTUMINEN -->
+<section id="kotouttaminen">
+  <p class="sec-label">Kotoutuminen</p>
+  <h2>Kotoutuminen — missä onnistutaan, missä epäonnistutaan?</h2>
+  <p>Suomessa on panostettu merkittävästi maahanmuuttajien kotoutumiseen. Silti tulokset vaihtelevat dramaattisesti ryhmästä toiseen.</p>
+  <h3>Kielitaito — suurin yksittäinen este</h3>
+  <p>Suomi on maailman vaikeimpia kieliä. THL:n tutkimuksen mukaan osa humanitaarisista maahanmuuttajista ei saavuta riittävää suomen kielen taitoa edes 5–10 vuoden jälkeen. Tämä estää työllistymistä ja sosiaalista osallistumista.</p>
+  <div class="info-box">
+    <h4>🗣️ Kielitaidon kehitys kotoutumisessa</h4>
+    <p><strong>2 vuotta:</strong> Perussanat, arjen asioiminen</p>
+    <p><strong>5 vuotta:</strong> Kohtalainen arjen sujuvuus, yksinkertainen työ mahdollista</p>
+    <p><strong>10 vuotta:</strong> Iso osa saavuttaa riittävän tason — osa ei koskaan</p>
+    <p><em>Luku- ja kirjoitustaidottomilla aikataulu pitenee merkittävästi</em></p>
+  </div>
+  <h3>Naisten kotoutuminen</h3>
+  <p>Naisten kotoutuminen on usein miehiä heikompaa tietyistä kulttuureista tulevilla ryhmillä. Kotiin jääminen, perinteisiin sukupuolirooleihin liittyvät odotukset ja puutteellinen kielitaito johtavat tilanteeseen, jossa <mark>osa naisista on lähes täysin erillään suomalaisesta yhteiskunnasta</mark> jopa vuosien asumisen jälkeen.</p>
+  <h3>Segregaatio asuinalueilla</h3>
+  <p>Helsingissä tietyt lähiöt ovat muuttuneet voimakkaasti maahanmuuttajavaltaisiksi. Tutkijat varoittavat, että alueellinen eriytyminen voi vaikeuttaa kotoutumista entisestään ja johtaa rinnakkaisten yhteiskuntien syntymiseen.</p>
+  <blockquote>
+    "Jos asuinalueella ei ole kantaväestöä kontakteina, on vaikea oppia kieltä, kulttuuria tai löytää töitä verkostojen kautta. Segregaatio ruokkii segregaatiota."
+    <cite>— THL:n tutkija, Maahanmuuttajien terveys ja hyvinvointi -raportti</cite>
+  </blockquote>
+</section>
+
+<!-- HYVINVOINTI -->
+<section id="hyvinvointi">
+  <p class="sec-label">Hyvinvointi ja terveys</p>
+  <h2>Maahanmuuttajien terveys ja sosiaaliset haasteet</h2>
+  <h3>Mielenterveys</h3>
+  <p>THL:n tutkimukset (UTH, Maamu) osoittavat, että pakolaistaustaisilla on korkeampi riski mielenterveysongelmiin — PTSD, masennus ja ahdistuneisuus ovat yleisempiä kuin kantaväestöllä. Tämä lisää terveyspalveluiden käyttöä ja kustannuksia.</p>
+  <h3>Tyttöjen sukuelinten silpominen (FGM)</h3>
+  <p>THL:n arvioiden mukaan Suomessa asuu <mark>tuhansia silpomisen kokeneita naisia ja tyttöjä</mark>, ja uusia tapauksia arvioidaan tapahtuvan myös Suomessa tai ns. lomasilpomisina ulkomailla. Ilmiö on laiton ja vakava ihmisoikeusrikkomus.</p>
+  <h3>Pakkoavioliitot ja kunniakulttuuri</h3>
+  <p>Poliisi ja järjestöt ovat raportoineet tapauksista, joissa nuoria naisia on pakotettu avioliittoon tai joissa heihin kohdistuu perheväkivaltaa kunnian nimissä. Tapaukset liittyvät pääosin tietyistä Lähi-idän ja Etelä-Aasian maista tulleisiin yhteisöihin. Viranomaisten on vaikea puuttua ilmiöön, koska uhrit eivät uskalla ilmoittaa asiasta.</p>
+</section>
+
+<!-- KULTTUURI -->
+<section id="kulttuuri">
+  <p class="sec-label">Kulttuuriset haasteet</p>
+  <h2>Kulttuuriset ristiriidat ja arvoristiriidat</h2>
+  <p>Maahanmuutto tuo mukanaan arvoja, jotka voivat olla ristiriidassa suomalaisen yhteiskunnan liberaalien perusarvojen kanssa.</p>
+  <h3>Uskonnollinen konservatismi</h3>
+  <p>EVAn kyselyissä on osoitettu, että muslimitaustaisten maahanmuuttajien joukossa homoseksuaalisuuden hyväksyminen on selvästi alhaisempaa kuin kantaväestöllä, ja perinteisiä sukupuolirooleja kannatetaan voimakkaammin.</p>
+  <h3>Uskonnollinen radikalisoituminen</h3>
+  <p>Suojelupoliisi (Supo) on nostanut islamismin yhdeksi keskeisimmistä turvallisuusuhista. Suomesta on lähtenyt henkilöitä ISIS-järjestön riveihin, ja radikaalien verkostojen toimintaa on havaittu suurimmissa kaupungeissa.</p>
+  <div class="info-box">
+    <h4>🔐 Supon arvioita 2023</h4>
+    <p>– Islamistinen terrorismi on edelleen Suomen vakavimpia turvallisuusuhkia</p>
+    <p>– Suomesta on lähtenyt ISIS-alueille kymmeniä taistelijoita</p>
+    <p>– Paluumuuttajat muodostavat turvallisuusriskin</p>
+    <p>– Verkossa tapahtuva radikalisoituminen on kasvava ilmiö</p>
+  </div>
+  <h3>Rinnakkaiset normistot</h3>
+  <p>Tutkijat ja viranomaiset ovat havainneet, että joissakin tiiviissä yhteisöissä voi esiintyä rinnakkaisia normistoja, joissa yhteisön sisäiset säännöt menevät suomalaisen lain edelle. Tämä voi ilmetä riita-asioiden selvittämisenä yhteisön sisällä tai poliisille ilmoittamatta jättämisenä.</p>
+</section>
+
+<!-- POLITIIKKA -->
+<section id="politiikka">
+  <p class="sec-label">Poliittiset linjaukset</p>
+  <h2>Suomen maahanmuuttopolitiikka ja sen muutos</h2>
+  <p>Maahanmuuttopolitiikka on ollut kiistainen aihe etenkin vuoden 2015 jälkeen.</p>
+  <h3>Orpon hallituksen (2023–) linjaukset</h3>
+  <div class="info-box">
+    <h4>📋
