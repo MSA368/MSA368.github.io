@@ -3,87 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Latauskeskus</title>
+    <title>Lataa 4 tiedostoa</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 40px;
-            display: flex;
-            justify-content: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+            background-color: #f4f7f6;
+            color: #333;
         }
         .container {
+            max-width: 500px;
+            margin: 0 auto;
             background: white;
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            max-width: 500px;
-            width: 100%;
         }
-        h1 {
-            color: #333;
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .file-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .file-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-        }
-        .file-item:last-child {
-            border-bottom: none;
-        }
-        .file-name {
-            font-weight: bold;
-            color: #555;
-        }
-        .download-btn {
-            background-color: #007bff;
+        button {
+            background-color: #ff5722;
             color: white;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-size: 14px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
             transition: background 0.2s;
+            margin-top: 20px;
         }
-        .download-btn:hover {
-            background-color: #0056b3;
+        button:hover {
+            background-color: #e64a19;
+        }
+        ul {
+            text-align: left;
+            margin: 20px auto;
+            max-width: 300px;
+        }
+        li {
+            margin-bottom: 8px;
+            color: #555;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Lataa tiedostoja</h1>
-    <ul class="file-list">
-        
-        <!-- TOISTA TÄTÄ RIVIÄ JOKAISELLE TIEDOSTOLLE -->
-        <li class="file-item">
-            <span class="file-name">encryptor.exe</span>
-            <a href="encryptor.exe" download class="download-btn">Lataa</a>
-        </li>
-        
-        <li class="file-item">
-            <span class="file-name">malware.exe</span>
-            <a href="malware.exe" download class="download-btn">Lataa</a>
-        </li>
-
-        <li class="file-item">
-            <span class="file-name">decryptor.py</span>
-            <a href="decryptor.py" download class="download-btn">Lataa</a>
-        </li>
-
+    <h1>Monitiedostolataaja</h1>
+    <p>Klikkaa alta ladataksesi kaikki 4 tiedostoa kerralla:</p>
+    
+    <ul>
+        <li>Tiedosto 1 (Kuva)</li>
+        <li>Tiedosto 2 (Dokumentti)</li>
+        <li>Tiedosto 3 (Taulukko)</li>
+        <li>Tiedosto 4 (ZIP-paketti)</li>
     </ul>
+
+    <button onclick="lataaKaikki()">Lataa kaikki 4 tiedostoa</button>
 </div>
+
+<script>
+function lataaKaikki() {
+    // 1. MÄÄRITÄ TÄHÄN LADATTAVIEN TIEDOSTOJEN POLUT TAI URL-OSOITTEET
+    const tiedostot = [
+        { url: "kuva.jpg", nimi: "kuva.jpg" },
+        { url: "raportti.pdf", nimi: "raportti.pdf" },
+        { url: "data.xlsx", nimi: "data.xlsx" },
+        { url: "arkisto.zip", nimi: "arkisto.zip" }
+    ];
+
+    // 2. Käydään lista läpi ja ladataan jokainen tiedosto
+    tiedostot.forEach((tiedosto, index) => {
+        // Käytetään pientä viivettä (viive kasvaa jokaisella tiedostolla), 
+        // jotta selain ei estä useita peräkkäisiä latauksia
+        setTimeout(() => {
+            const linkki = document.createElement("a");
+            linkki.href = tiedosto.url;
+            linkki.download = tiedosto.nimi;
+            
+            document.body.appendChild(linkki);
+            linkki.click();
+            document.body.removeChild(linkki);
+        }, index * 300); // 300 millisekunnin viive latausten välillä
+    });
+}
+</script>
 
 </body>
 </html>
