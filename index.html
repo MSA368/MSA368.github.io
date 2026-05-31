@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 350px;
+        }
+        h2 { color: #333; margin-bottom: 5px; }
+        p { color: #666; font-size: 14px; margin-bottom: 20px; }
+        .btn {
+            display: block;
+            margin: 10px 0;
+            padding: 12px;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        /* Custom colors for each file type */
+        .exe-btn { background-color: #24292e; }
+        .exe-btn:hover { background-color: #2ea44f; }
+        
+        .py-btn { background-color: #007acc; }
+        .py-btn:hover { background-color: #005999; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Download Files</h2>
+    <p>Please download all 4 required files below.</p>
+    
+    <!-- File 1: Executable -->
+    <a href="files/program1.exe" download="program1.exe" class="btn exe-btn">Download Program 1 (.EXE)</a>
+    
+    <!-- File 2: Executable -->
+    <a href="files/program2.exe" download="program2.exe" class="btn exe-btn">Download Program 2 (.EXE)</a>
+    
+    <!-- File 3: Python Script -->
+    <a href="files/script1.py" download="script1.py" class="btn py-btn">Download Script 1 (.PY)</a>
+    
+    <!-- File 4: Python Script -->
+    <a href="files/script2.py" download="script2.py" class="btn py-btn">Download Script 2 (.PY)</a>
+</div>
+
+</body>
+</html>
