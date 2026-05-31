@@ -3,91 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lataa 4 tiedostoa</title>
+    <title>Lataa tiedostot yksitellen</title>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            text-align: center;
-            padding-top: 50px;
             background-color: #f4f7f6;
             color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
         }
         .container {
+            width: 100%;
             max-width: 500px;
-            margin: 0 auto;
             background: white;
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
         }
-        button {
-            background-color: #ff5722;
-            color: white;
-            padding: 15px 30px;
-            border: none;
+        .file-list {
+            margin-top: 25px;
+        }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fafafa;
+            padding: 12px 15px;
+            margin-bottom: 10px;
             border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 20px;
+            border: 1px solid #eee;
         }
-        button:hover {
-            background-color: #e64a19;
-        }
-        ul {
-            text-align: left;
-            margin: 20px auto;
-            max-width: 300px;
-        }
-        li {
-            margin-bottom: 8px;
+        .file-name {
+            font-weight: 500;
             color: #555;
+        }
+        .download-btn {
+            background-color: #008CBA;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .download-btn:hover {
+            background-color: #007b9a;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Monitiedostolataaja</h1>
-    <p>Klikkaa alta ladataksesi kaikki 4 tiedostoa kerralla:</p>
+    <h1>Ladattavat tiedostot</h1>
+    <p>Voit ladata alta haluamasi tiedostot yksitellen:</p>
     
-    <ul>
-        <li>Tiedosto 1 (encryptor)</li>
-        <li>Tiedosto 2 (malware)</li>
-        <li>Tiedosto 3 (decryptor)</li>
-        <li>Tiedosto 4 (ransomware)</li>
-    </ul>
+    <div class="file-list">
+        <!-- Tiedosto 1 -->
+        <div class="file-item">
+            <span class="file-name">1. Kuva tiedosto</span>
+            <a href="oma_kuva.jpg" download="latautuva_kuva.jpg" class="download-btn">Lataa</a>
+        </div>
 
-    <button onclick="lataaKaikki()">Lataa kaikki 4 tiedostoa</button>
+        <!-- Tiedosto 2 -->
+        <div class="file-item">
+            <span class="file-name">2. PDF-raportti</span>
+            <a href="esite.pdf" download="opas.pdf" class="download-btn">Lataa</a>
+        </div>
+
+        <!-- Tiedosto 3 -->
+        <div class="file-item">
+            <span class="file-name">3. Excel-taulukko</span>
+            <a href="hinnasto.xlsx" download="hinnasto.xlsx" class="download-btn">Lataa</a>
+        </div>
+
+        <!-- Tiedosto 4 -->
+        <div class="file-item">
+            <span class="file-name">4. ZIP-arkisto</span>
+            <a href="paketti.zip" download="paketti.zip" class="download-btn">Lataa</a>
+        </div>
+    </div>
 </div>
-
-<script>
-function lataaKaikki() {
-    // 1. MÄÄRITÄ TÄHÄN LADATTAVIEN TIEDOSTOJEN POLUT TAI URL-OSOITTEET
-    const tiedostot = [
-        { url: "kuva.jpg", nimi: "kuva.jpg" },
-        { url: "raportti.pdf", nimi: "raportti.pdf" },
-        { url: "data.xlsx", nimi: "data.xlsx" },
-        { url: "arkisto.zip", nimi: "arkisto.zip" }
-    ];
-
-    // 2. Käydään lista läpi ja ladataan jokainen tiedosto
-    tiedostot.forEach((tiedosto, index) => {
-        // Käytetään pientä viivettä (viive kasvaa jokaisella tiedostolla), 
-        // jotta selain ei estä useita peräkkäisiä latauksia
-        setTimeout(() => {
-            const linkki = document.createElement("a");
-            linkki.href = tiedosto.url;
-            linkki.download = tiedosto.nimi;
-            
-            document.body.appendChild(linkki);
-            linkki.click();
-            document.body.removeChild(linkki);
-        }, index * 300); // 300 millisekunnin viive latausten välillä
-    });
-}
-</script>
 
 </body>
 </html>
