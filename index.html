@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Royal Blackjack</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --felt: #0d3320;
+    --felt-light: #154d31;
+    --felt-dark: #071a10;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-dim: #8a6e2f;
+    --cream: #f5f0e8;
+    --red: #c0392b;
+    --dark: #06100a;
+    --card-back: #1a1a6e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    min-height: 100vh;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--cream);
+    overflow-x: hidden;
+    background-image:
+      repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(201,168,76,0.03) 2px, rgba(201,168,76,0.03) 4px);
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    padding: 28px 20px 10px;
+    position: relative;
+  }
+  .header::after {
+    content: '';
+    display: block;
+    width: 300px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 10px auto 0;
+  }
+  .title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-shadow: 0 0 40px rgba(201,168,76,0.4);
+  }
+  .subtitle {
+    font-size: 0.85rem;
+    letter-spacing: 0.4em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* TABLE */
+  .table-container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 10px 16px 30px;
+  }
+
+  .felt-table {
+    background: radial-gradient(ellipse at 50% 30%, var(--felt-light) 0%, var(--felt) 50%, var(--felt-dark) 100%);
+    border-radius: 50% 50% 0 0 / 30% 30% 0 0;
+    border: 4px solid var(--gold-dim);
+    border-bottom: none;
+    box-shadow:
+      inset 0 0 60px rgba(0,0,0,0.5),
+      0 0 0 8px #0a2015,
+      0 0 0 12px var(--gold-dim),
+      0 0 60px rgba(0,0,0,0.8);
+    padding: 24px 40px 30px;
+    position: relative;
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  /* DECORATIVE ARCS */
+  .arc-decoration {
+    position: absolute;
+    top: 16px; left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 60px;
+    border-top: 1px solid rgba(201,168,76,0.25);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  /* STATS */
+  .stats-bar {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .stat { display: flex; flex-direction: column; align-items: center; }
+  .stat-label { font-size: 0.65rem; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; }
+  .stat-value { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--gold); }
+  .stat-divider { width: 1px; height: 30px; background: rgba(201,168,76,0.2); }
+
+  /* HAND AREAS */
+  .hand-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .hand-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(201,168,76,0.6);
+  }
+  .hand-label span {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    margin-left: 8px;
+  }
+
+  .cards-row {
+    display: flex;
+    gap: 10px;
+    min-height: 110px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* PLAYING CARDS */
+  .card {
+    width: 72px;
+    height: 104px;
+    border-radius: 8px;
+    background: white;
+    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 5px 6px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    box-shadow: 2px 3px 12px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(0,0,0,0.05);
+    transition: transform 0.15s ease;
+    position: relative;
+    animation: dealCard 0.35s cubic-bezier(.22,.68,0,1.2) both;
+    flex-shrink: 0;
+  }
+  @keyframes dealCard {
+    from { opacity: 0; transform: translateY(-40px) rotate(-8deg) scale(0.85); }
+    to   { opacity: 1; transform: none; }
+  }
+  .card:hover { transform: translateY(-4px); }
+
+  .card.red { color: var(--red); }
+  .card.black { color: #1a1a1a; }
+
+  .card-top { display: flex; flex-direction: column; align-items: flex-start; line-height: 1; }
+  .card-top .rank { font-size: 1rem; }
+  .card-top .suit { font-size: 0.85rem; }
+  .card-center { font-size: 2rem; text-align: center; line-height: 1; }
+  .card-bottom { display: flex; flex-direction: column; align-items: flex-end; line-height: 1; transform: rotate(180deg); }
+  .card-bottom .rank { font-size: 1rem; }
+  .card-bottom .suit { font-size: 0.85rem; }
+
+  .card.facedown {
+    background: linear-gradient(135deg, #0a0a5a 0%, #1a1a8e 40%, #0a0a5a 100%);
+    border: 1px solid #3030aa;
+    display: flex; align-items: center; justify-content: center;
+    color: transparent;
+    background-image:
+      linear-gradient(135deg, #0a0a5a 0%, #1a1a8e 40%, #0a0a5a 100%),
+      repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.03) 5px, rgba(255,255,255,0.03) 10px);
+  }
+  .card.facedown::after {
+    content: '♦';
+    color: rgba(201,168,76,0.6);
+    font-size: 2rem;
+  }
+
+  /* DIVIDER */
+  .table-divider {
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
+    margin: 4px 0;
+  }
+
+  /* BET AREA */
+  .bet-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .chip-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .chip {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.3);
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+    user-select: none;
+  }
+  .chip::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    border: 2px dashed rgba(255,255,255,0.25);
+  }
+  .chip:hover:not(:disabled) { transform: translateY(-3px) scale(1.08); box-shadow: 0 8px 20px rgba(0,0,0,0.5); }
+  .chip:active:not(:disabled) { transform: translateY(0) scale(0.95); }
+  .chip:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+  .chip-5   { background: radial-gradient(circle at 35% 35%, #e74c3c, #922b21); color: white; }
+  .chip-10  { background: radial-gradient(circle at 35% 35%, #3498db, #1a5276); color: white; }
+  .chip-25  { background: radial-gradient(circle at 35% 35%, #2ecc71, #1a7240); color: white; }
+  .chip-50  { background: radial-gradient(circle at 35% 35%, #9b59b6, #6c3483); color: white; }
+  .chip-100 { background: radial-gradient(circle at 35% 35%, #f39c12, #d35400); color: white; }
+
+  /* CURRENT BET DISPLAY */
+  .current-bet-display {
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 30px;
+    padding: 8px 20px;
+  }
+  .bet-label { font-size: 0.7rem; letter-spacing: 0.25em; color: var(--gold-dim); text-transform: uppercase; }
+  .bet-amount { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold); }
+
+  /* CONTROL BUTTONS */
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  .btn {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    padding: 11px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transition: left 0.4s;
+  }
+  .btn:hover::after { left: 150%; }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn:disabled::after { display: none; }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+    color: #1a0f00;
+    box-shadow: 0 4px 15px rgba(201,168,76,0.35);
+  }
+  .btn-primary:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(201,168,76,0.55);
+    transform: translateY(-2px);
+  }
+  .btn-secondary {
+    background: rgba(255,255,255,0.08);
+    color: var(--cream);
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background: rgba(255,255,255,0.14);
+    transform: translateY(-2px);
+  }
+  .btn-danger {
+    background: rgba(192,57,43,0.7);
+    color: white;
+    border: 1px solid rgba(192,57,43,0.5);
+  }
+  .btn-danger:hover:not(:disabled) {
+    background: rgba(192,57,43,0.9);
+    transform: translateY(-2px);
+  }
+
+  /* MESSAGE OVERLAY */
+  .message-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 14px;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(2px);
+    z-index: 10;
+    animation: fadeIn 0.3s ease;
+    text-align: center;
+    padding: 20px;
+  }
+  .message-overlay.show { display: flex; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .msg-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1;
+  }
+  .msg-title.win  { color: var(--gold); text-shadow: 0 0 30px rgba(201,168,76,0.7); }
+  .msg-title.lose { color: #e74c3c; text-shadow: 0 0 30px rgba(231,76,60,0.5); }
+  .msg-title.push { color: var(--cream); }
+  .msg-title.bj   { color: var(--gold); text-shadow: 0 0 40px rgba(201,168,76,1); }
+
+  .msg-sub {
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    color: rgba(245,240,232,0.7);
+    text-transform: uppercase;
+  }
+
+  .msg-winnings {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--gold);
+  }
+
+  /* SCORE BADGE */
+  .score-badge {
+    display: inline-block;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(201,168,76,0.35);
+    border-radius: 20px;
+    padding: 3px 14px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--gold-light);
+    min-width: 40px;
+    text-align: center;
+  }
+  .score-badge.bust { color: var(--red); border-color: var(--red); }
+  .score-badge.bj   { color: var(--gold); border-color: var(--gold); animation: pulse 1s infinite; }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.4); }
+    50%      { box-shadow: 0 0 0 6px rgba(201,168,76,0); }
+  }
+
+  /* HISTORY */
+  .history-panel {
+    max-width: 820px;
+    margin: 0 auto 20px;
+    padding: 0 16px;
+  }
+  .history-title {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .history-dots {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .hdot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .hdot.w { background: var(--gold); }
+  .hdot.l { background: var(--red); }
+  .hdot.p { background: rgba(245,240,232,0.3); }
+
+  /* RESPONSIVE */
+  @media (max-width: 520px) {
+    .felt-table { padding: 18px 16px 22px; border-radius: 40% 40% 0 0 / 20% 20% 0 0; }
+    .card { width: 60px; height: 88px; font-size: 0.9rem; }
+    .card-center { font-size: 1.6rem; }
+    .chip { width: 48px; height: 48px; font-size: 0.75rem; }
+    .btn { padding: 9px 16px; font-size: 0.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="title">♠ ROYAL BLACKJACK ♠</div>
+  <div class="subtitle">Casino Royale &mdash; Vakiopöytä</div>
+</div>
+
+<div class="table-container">
+  <div class="felt-table" id="table">
+    <div class="arc-decoration"></div>
+
+    <!-- OVERLAY -->
+    <div class="message-overlay" id="overlay">
+      <div class="msg-title" id="overlayTitle">—</div>
+      <div class="msg-sub" id="overlaySub"></div>
+      <div class="msg-winnings" id="overlayWin"></div>
+      <button class="btn btn-primary" onclick="newRound()" style="margin-top:6px">Uusi kierros</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="stat-label">Saldo</div>
+        <div class="stat-value" id="balance">1 000 €</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-label">Voitot</div>
+        <div class="stat-value" id="wins">0</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-label">Häviöt</div>
+        <div class="stat-value" id="losses">0</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-label">Kierrokset</div>
+        <div class="stat-value" id="rounds">0</div>
+      </div>
+    </div>
+
+    <!-- DEALER -->
+    <div class="hand-section">
+      <div class="hand-label">Jakaja <span id="dealerScore">—</span></div>
+      <div class="cards-row" id="dealerCards"></div>
+    </div>
+
+    <div class="table-divider"></div>
+
+    <!-- PLAYER -->
+    <div class="hand-section">
+      <div class="hand-label">Sinä <span id="playerScore">—</span></div>
+      <div class="cards-row" id="playerCards"></div>
+    </div>
+
+    <!-- BET / CHIPS (shown before deal) -->
+    <div class="bet-area" id="betArea">
+      <div class="chip-row">
+        <div class="chip chip-5"   onclick="addBet(5)">5€</div>
+        <div class="chip chip-10"  onclick="addBet(10)">10€</div>
+        <div class="chip chip-25"  onclick="addBet(25)">25€</div>
+        <div class="chip chip-50"  onclick="addBet(50)">50€</div>
+        <div class="chip chip-100" onclick="addBet(100)">100€</div>
+      </div>
+      <div class="current-bet-display">
+        <div class="bet-label">Panos</div>
+        <div class="bet-amount" id="betDisplay">0 €</div>
+      </div>
+    </div>
+
+    <!-- GAME CONTROLS -->
+    <div class="controls" id="controls">
+      <!-- filled dynamically -->
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY -->
+<div class="history-panel">
+  <div class="history-title">Tuloshistoria</div>
+  <div class="history-dots" id="history"></div>
+</div>
+
+<script>
+// ===== STATE =====
+let deck = [];
+let playerHand = [];
+let dealerHand = [];
+let balance = 1000;
+let currentBet = 0;
+let gameState = 'betting'; // 'betting' | 'playing' | 'done'
+let stats = { wins: 0, losses: 0, rounds: 0 };
+let history = [];
+let doubled = false;
+
+const SUITS = ['♠','♥','♦','♣'];
+const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+
+// ===== DECK =====
+function buildDeck() {
+  const d = [];
+  for (const s of SUITS) for (const r of RANKS) d.push({ rank: r, suit: s });
+  // 6 decks
+  const big = [];
+  for (let i = 0; i < 6; i++) big.push(...d.map(c => ({...c})));
+  return shuffle(big);
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function cardValue(rank) {
+  if (['J','Q','K'].includes(rank)) return 10;
+  if (rank === 'A') return 11;
+  return parseInt(rank);
+}
+
+function handScore(hand) {
+  let score = 0, aces = 0;
+  for (const c of hand) {
+    score += cardValue(c.rank);
+    if (c.rank === 'A') aces++;
+  }
+  while (score > 21 && aces > 0) { score -= 10; aces--; }
+  return score;
+}
+
+function isRed(suit) { return suit === '♥' || suit === '♦'; }
+
+// ===== RENDER =====
+function renderCard(card, facedown = false) {
+  const el = document.createElement('div');
+  el.className = 'card' + (facedown ? ' facedown' : (isRed(card.suit) ? ' red' : ' black'));
+  if (!facedown) {
+    el.innerHTML = `
+      <div class="card-top"><div class="rank">${card.rank}</div><div class="suit">${card.suit}</div></div>
+      <div class="card-center">${card.suit}</div>
+      <div class="card-bottom"><div class="rank">${card.rank}</div><div class="suit">${card.suit}</div></div>`;
+  }
+  return el;
+}
+
+function renderHands(hideDealer = true) {
+  const pc = document.getElementById('playerCards');
+  const dc = document.getElementById('dealerCards');
+  pc.innerHTML = '';
+  dc.innerHTML = '';
+
+  for (const c of playerHand) pc.appendChild(renderCard(c));
+  dealerHand.forEach((c, i) => dc.appendChild(renderCard(c, hideDealer && i === 1)));
+
+  const pScore = handScore(playerHand);
+  const dScore = hideDealer ? handScore([dealerHand[0]]) : handScore(dealerHand);
+
+  const pb = document.getElementById('playerScore');
+  pb.textContent = pScore;
+  const cls = pScore > 21 ? 'bust' : (pScore === 21 && playerHand.length === 2 ? 'bj' : '');
+  pb.className = 'score-badge' + (cls ? ' ' + cls : '');
+
+  const db = document.getElementById('dealerScore');
+  db.textContent = hideDealer ? '?' : dScore;
+  db.className = 'score-badge' + (!hideDealer && dScore > 21 ? ' bust' : '');
+}
+
+function renderStats() {
+  document.getElementById('balance').textContent = balance.toLocaleString('fi') + ' €';
+  document.getElementById('wins').textContent = stats.wins;
+  document.getElementById('losses').textContent = stats.losses;
+  document.getElementById('rounds').textContent = stats.rounds;
+}
+
+function renderHistory() {
+  const el = document.getElementById('history');
+  el.innerHTML = '';
+  for (const h of history.slice(-40)) {
+    const d = document.createElement('div');
+    d.className = 'hdot ' + h;
+    el.appendChild(d);
+  }
+}
+
+function setControls(state) {
+  const ctrl = document.getElementById('controls');
+  const betArea = document.getElementById('betArea');
+  ctrl.innerHTML = '';
+
+  if (state === 'betting') {
+    betArea.style.display = 'flex';
+    const deal = btn('Jaa kortit', 'primary', 'deal()', currentBet === 0);
+    const clear = btn('Tyhjennä panos', 'danger', 'clearBet()', currentBet === 0);
+    ctrl.appendChild(clear);
+    ctrl.appendChild(deal);
+  } else if (state === 'playing') {
+    betArea.style.display = 'none';
+    const score = handScore(playerHand);
+    ctrl.appendChild(btn('Ota kortti', 'primary', 'hit()'));
+    ctrl.appendChild(btn('Jää', 'secondary', 'stand()'));
+    // Double down only on first two cards with enough balance
+    if (playerHand.length === 2 && balance >= currentBet && !doubled) {
+      ctrl.appendChild(btn('Tuplaa', 'secondary', 'doubleDown()'));
+    }
+  } else {
+    betArea.style.display = 'none';
+  }
+}
+
+function btn(text, type, onclick, disabled = false) {
+  const b = document.createElement('button');
+  b.className = `btn btn-${type}`;
+  b.textContent = text;
+  b.setAttribute('onclick', onclick);
+  if (disabled) b.disabled = true;
+  return b;
+}
+
+// ===== BET =====
+function addBet(amount) {
+  if (gameState !== 'betting') return;
+  if (amount > balance) return;
+  currentBet += amount;
+  balance -= amount;
+  document.getElementById('betDisplay').textContent = currentBet.toLocaleString('fi') + ' €';
+  renderStats();
+  setControls('betting');
+}
+
+function clearBet() {
+  if (gameState !== 'betting') return;
+  balance += currentBet;
+  currentBet = 0;
+  document.getElementById('betDisplay').textContent = '0 €';
+  renderStats();
+  setControls('betting');
+}
+
+// ===== DEAL =====
+function deal() {
+  if (currentBet === 0) return;
+  if (deck.length < 20) deck = buildDeck();
+  playerHand = [deck.pop(), deck.pop()];
+  dealerHand = [deck.pop(), deck.pop()];
+  doubled = false;
